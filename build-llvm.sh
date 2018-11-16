@@ -27,6 +27,8 @@ mkdir -p "$LLVM_BUILD_DIR"
 # LLVM base
 ################################################################
 
+if false; then
+
 mkdir -p "$LLVM_SOURCE_DIR"
 cd "$LLVM_SOURCE_DIR"
 
@@ -49,9 +51,13 @@ then
 	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
 fi
 
+fi
+
 ################################################################
 # Clang front end
 ################################################################
+
+if false; then
 
 mkdir -p "$LLVM_SOURCE_DIR/tools"
 cd "$LLVM_SOURCE_DIR/tools"
@@ -75,9 +81,13 @@ then
 	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
 fi
 
+fi
+
 ################################################################
 # Compiler-RT
 ################################################################
+
+if false; then
 
 mkdir -p "$LLVM_SOURCE_DIR/projects"
 cd "$LLVM_SOURCE_DIR/projects"
@@ -101,9 +111,13 @@ then
 	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
 fi
 
+fi
+
 ################################################################
 # Tools Extras
 ################################################################
+
+if false; then
 
 mkdir -p "$LLVM_SOURCE_DIR/projects"
 cd "$LLVM_SOURCE_DIR/projects"
@@ -127,9 +141,13 @@ then
 	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
 fi
 
+fi
+
 ################################################################
 # Polly optimizer
 ################################################################
+
+if false; then
 
 mkdir -p "$LLVM_SOURCE_DIR/tools"
 cd "$LLVM_SOURCE_DIR/tools"
@@ -153,13 +171,34 @@ then
 	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
 fi
 
+fi
+
 ################################################################
 # Build
 ################################################################
 
 cd "$LLVM_BUILD_DIR"
 
-if ! cmake -DCMAKE_INSTALL_PREFIX="/opt/llvm" -DLLVM_SRC_ROOT="$LLVM_SOURCE_DIR" -LLVM_CONFIG_PATH="$LLVM_SOURCE_DIR" -DLLVM_TARGETS_TO_BUILD="PowerPC" -DLLVM_INCLUDE_TOOLS="ON" -DLLVM_BUILD_TESTS="ON" "$LLVM_SOURCE_DIR";
+CMAKE_CMDS=()
+CMAKE_CMDS+=(-DCMAKE_INSTALL_PREFIX="/opt/llvm")
+CMAKE_CMDS+=(-DLLVM_TARGETS_TO_BUILD="PowerPC")
+CMAKE_CMDS+=(-DLLVM_SRC_ROOT="$LLVM_SOURCE_DIR")
+CMAKE_CMDS+=(-DLLVM_INCLUDE_TOOLS="ON")
+CMAKE_CMDS+=(-DLLVM_BUILD_TESTS="ON")
+
+if [[ ! -z "$CC" ]]; then
+	CMAKE_CMDS+=(-DCMAKE_C_COMPILER="$CC")
+fi
+
+if [[ ! -z "$CXX" ]]; then
+	CMAKE_CMDS+=(-DCMAKE_CXX_COMPILER="$CXX")
+fi
+
+echo "*******************************************"
+echo "CMake arguments: ${CMAKE_CMDS[@]}"
+echo "*******************************************"
+
+if ! cmake "${CMAKE_CMDS[@]}" "$LLVM_SOURCE_DIR";
 then
 	echo "Failed to build LLVM sources"
 	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
