@@ -230,8 +230,8 @@ fi
 # libc++
 ################################################################
 
-mkdir -p "$LLVM_SOURCE_DIR/projects"
-cd "$LLVM_SOURCE_DIR/projects"
+mkdir -p "$LLVM_SOURCE_DIR/projects/libcxx"
+cd "$LLVM_SOURCE_DIR/projects/libcxx"
 
 if [[ ! -f libcxx-7.0.0.src.tar.xz ]];
 then
@@ -260,8 +260,8 @@ fi
 # libc++abi
 ################################################################
 
-mkdir -p "$LLVM_SOURCE_DIR/projects"
-cd "$LLVM_SOURCE_DIR/projects"
+mkdir -p "$LLVM_SOURCE_DIR/projects/libcxxabi"
+cd "$LLVM_SOURCE_DIR/projects/libcxxabi"
 
 if [[ ! -f libcxxabi-7.0.0.src.tar.xz ]];
 then
