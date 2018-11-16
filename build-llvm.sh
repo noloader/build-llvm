@@ -11,7 +11,18 @@ LLVM_SOURCE_DIR="$HOME/llvm_source"
 LLVM_BUILD_DIR="$HOME/llvm_build"
 
 # LLVM_VERSION="7.0.0"
-LLVM_ARCH="PowerPC"
+LLVM_ARCH="Unknown"
+
+THIS_HOST=$(uname -m)
+case "$THIS_HOST" in
+	"x86_64")
+		LLVM_ARCH="X86" ;;
+	"Power Macintosh")
+		LLVM_ARCH="PowerPC" ;;
+	*)
+		echo "Unknown architecture"
+		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+esac
 
 ################################################################
 # Exit
@@ -216,6 +227,66 @@ then
 fi
 
 ################################################################
+# libc++
+################################################################
+
+mkdir -p "$LLVM_SOURCE_DIR/projects"
+cd "$LLVM_SOURCE_DIR/projects"
+
+if [[ ! -f libcxx-7.0.0.src.tar.xz ]];
+then
+	if ! wget https://releases.llvm.org/7.0.0/libcxx-7.0.0.src.tar.xz;
+	then
+		echo "Attempting download libc++ using insecure channel."
+		if ! wget --no-check-certificate https://releases.llvm.org/7.0.0/libcxx-7.0.0.src.tar.xz;  
+		then
+			echo "Failed to download libc++ sources"
+			[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+		fi
+	fi
+fi
+
+if [[ ! -f libcxx-7.0.0.src ]];
+then
+	if ! xz -cd libcxx-7.0.0.src.tar.xz | tar --strip-components=1 -xvf - ;
+	then
+		echo "Failed to unpack libc++ sources"
+		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+	fi
+	touch libcxx-7.0.0.src
+fi
+
+################################################################
+# libc++abi
+################################################################
+
+mkdir -p "$LLVM_SOURCE_DIR/projects"
+cd "$LLVM_SOURCE_DIR/projects"
+
+if [[ ! -f libcxxabi-7.0.0.src.tar.xz ]];
+then
+	if ! wget https://releases.llvm.org/7.0.0/libcxxabi-7.0.0.src.tar.xz;
+	then
+		echo "Attempting download libc++abi using insecure channel."
+		if ! wget --no-check-certificate https://releases.llvm.org/7.0.0/libcxxabi-7.0.0.src.tar.xz; 
+		then
+			echo "Failed to download libc++abi sources"
+			[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+		fi
+	fi
+fi
+
+if [[ ! -f libcxxabi-7.0.0.src ]];
+then
+	if ! xz -cd libcxxabi-7.0.0.src.tar.xz | tar --strip-components=1 -xvf - ;
+	then
+		echo "Failed to unpack libc++abi sources"
+		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+	fi
+	touch libcxxabi-7.0.0.src
+fi
+
+################################################################
 # Build
 ################################################################
 
@@ -227,7 +298,7 @@ CMAKE_ARGS+=(-DLLVM_TARGETS_TO_BUILD="$LLVM_ARCH")
 # CMAKE_ARGS+=(-DLLVM_SRC_ROOT="$LLVM_SOURCE_DIR")
 CMAKE_ARGS+=(-DLLVM_PARALLEL_COMPILE_JOBS="4")
 CMAKE_ARGS+=(-DLLVM_INCLUDE_TOOLS="ON")
-CMAKE_ARGS+=(-DLLVM_BUILD_TESTS="ON")
+# CMAKE_ARGS+=(-DLLVM_BUILD_TESTS="ON")
 
 if [[ ! -z "$CC" ]]; then
 	CMAKE_ARGS+=(-DCMAKE_C_COMPILER="$CC")
