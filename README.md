@@ -26,9 +26,11 @@ CC=/opt/local/bin/gcc-mp-5 CXX=/opt/local/bin/g++-mp-5 ./build-llvm.sh
 
 # Installing the toolchain
 
-Afetr building the sources you have to manually install them, if desired. Perform the following steps to install the toolchain:
+You have to manually install the toolchain after building it, if desired. Perform the following steps to install the toolchain:
 
 ```
 cd llvm_build
 sudo make install
 ```
+
+You can also delete `BUILD_SCRIPT_SOURCE_DIR` and `BUILD_SCRIPT_BUILD_DIR` after installation.
