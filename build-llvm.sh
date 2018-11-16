@@ -7,15 +7,17 @@
 # Variables
 ################################################################
 
-# LLVM_VERSION="7.0.0"
 LLVM_SOURCE_DIR="$HOME/llvm_source"
 LLVM_BUILD_DIR="$HOME/llvm_build"
 
-CURRENT_DIR=$(pwd)
+# LLVM_VERSION="7.0.0"
+LLVM_ARCH="PowerPC"
 
 ################################################################
 # Exit
 ################################################################
+
+CURRENT_DIR=$(pwd)
 
 function finish {
   cd "$CURRENT_DIR"
@@ -221,7 +223,7 @@ cd "$LLVM_BUILD_DIR"
 
 CMAKE_ARGS=()
 CMAKE_ARGS+=(-DCMAKE_INSTALL_PREFIX="/opt/llvm")
-CMAKE_ARGS+=(-DLLVM_TARGETS_TO_BUILD="X86")
+CMAKE_ARGS+=(-DLLVM_TARGETS_TO_BUILD="$LLVM_ARCH")
 # CMAKE_ARGS+=(-DLLVM_SRC_ROOT="$LLVM_SOURCE_DIR")
 CMAKE_ARGS+=(-DLLVM_PARALLEL_COMPILE_JOBS="4")
 CMAKE_ARGS+=(-DLLVM_INCLUDE_TOOLS="ON")
