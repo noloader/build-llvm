@@ -25,6 +25,9 @@
 # Variables
 ################################################################
 
+# Cmake location. Defaults to cmake program
+CMAKE="${CMAKE:-cmake}"
+
 # Where to install the artifacts
 BUILD_SCRIPT_INSTALL_PREFIX="/opt/llvm"
 
@@ -367,7 +370,7 @@ if false; then
 	echo "*****************************************************************************"
 fi
 
-if ! cmake "${CMAKE_ARGS[@]}" "$BUILD_SCRIPT_SOURCE_DIR";
+if ! "$CMAKE" "${CMAKE_ARGS[@]}" "$BUILD_SCRIPT_SOURCE_DIR";
 then
 	echo "Failed to cmake LLVM sources"
 	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1

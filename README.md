@@ -8,6 +8,7 @@ Testing on Fedora x86_64 reveals no `LD_LIBRARY_PATH` is needed to run an execut
 
 There are several variables of interest you can tune for the build:
 
+* `CMAKE` - the tool to use for CMake. The default value is `cmake`.
 * `BUILD_SCRIPT_INSTALL_PREFIX` - the installation directory. The default value is `/opt/llvm`.
 * `BUILD_SCRIPT_SOURCE_DIR` - scratch directory to download an unpack the sources. The default value is `$HOME/llvm_source/llvm`. The tail must include `llvm/`.
 * `BUILD_SCRIPT_BUILD_DIR` - scratch directory to build the the sources. Output artifacts are in this directory. The default value is `$HOME/llvm_build`.
@@ -34,3 +35,7 @@ sudo make install
 ```
 
 You can also delete `BUILD_SCRIPT_SOURCE_DIR` and `BUILD_SCRIPT_BUILD_DIR` after installation.
+
+# Build CMake
+
+LLVM requires CMake 2.12 or higher. There is a script called `build-cmake.sh` which provides an updated CMake if needed. The script builds in the `cmake_build` directory and installs itself at `$HOME/cmake`. You can change the variables by editing the top of the script.
