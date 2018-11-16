@@ -20,7 +20,7 @@ There are several variables of interest you can tune for the build:
 LLVM requires GCC 4.8 or above to compile the source code. The script honors alternate compilers, and you can pass them to CMake using:
 
 ```
-# Attempting a build on PowerMac with MacPorts GCC
+# Attempt to build on PowerMac with MacPorts GCC
 CC=/opt/local/bin/gcc-mp-5 CXX=/opt/local/bin/g++-mp-5 ./build-llvm.sh
 ```
 
