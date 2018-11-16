@@ -93,37 +93,7 @@ fi
 fi
 
 ################################################################
-# Compiler-RT
-################################################################
-
-if true; then
-
-mkdir -p "$LLVM_SOURCE_DIR/projects"
-cd "$LLVM_SOURCE_DIR/projects"
-
-if [[ ! -f compiler-rt-7.0.0.src.tar.xz ]];
-then
-	if ! wget https://releases.llvm.org/7.0.0/compiler-rt-7.0.0.src.tar.xz;
-	then
-		echo "Attempting download Compiler-RT using insecure channel."
-		if ! wget --no-check-certificate https://releases.llvm.org/7.0.0/compiler-rt-7.0.0.src.tar.xz;  
-		then
-			echo "Failed to download Compiler-RT sources"
-			[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
-		fi
-	fi
-fi
-
-if ! xz -cd compiler-rt-7.0.0.src.tar.xz | tar --strip-components=1 -xvf - ;
-then
-	echo "Failed to unpack Compiler-RT sources"
-	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
-fi
-
-fi
-
-################################################################
-# Tools Extras
+# Clang Tools
 ################################################################
 
 if true; then
@@ -135,10 +105,10 @@ if [[ ! -f clang-tools-extra-7.0.0.src.tar.xz ]];
 then
 	if ! wget https://releases.llvm.org/7.0.0/clang-tools-extra-7.0.0.src.tar.xz;
 	then
-		echo "Attempting download Tools Extras using insecure channel."
+		echo "Attempting download Clang Tools using insecure channel."
 		if ! wget --no-check-certificate https://releases.llvm.org/7.0.0/clang-tools-extra-7.0.0.src.tar.xz;  
 		then
-			echo "Failed to download Tools Extras sources"
+			echo "Failed to download Clang Tools sources"
 			[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
 		fi
 	fi
@@ -146,7 +116,37 @@ fi
 
 if ! xz -cd clang-tools-extra-7.0.0.src.tar.xz | tar --strip-components=1 -xvf - ;
 then
-	echo "Failed to unpack Tools Extras sources"
+	echo "Failed to unpack Clang Tools sources"
+	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+fi
+
+fi
+
+################################################################
+# LLD Linker
+################################################################
+
+if true; then
+
+mkdir -p "$LLVM_SOURCE_DIR/tools"
+cd "$LLVM_SOURCE_DIR/tools"
+
+if [[ ! -f lld-7.0.0.src.tar.xz ]];
+then
+	if ! wget https://releases.llvm.org/7.0.0/lld-7.0.0.src.tar.xz;
+	then
+		echo "Attempting download LLD Linker using insecure channel."
+		if ! wget --no-check-certificate https://releases.llvm.org/7.0.0/lld-7.0.0.src.tar.xz;  
+		then
+			echo "Failed to download LLD Linker sources"
+			[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+		fi
+	fi
+fi
+
+if ! xz -cd lld-7.0.0.src.tar.xz | tar --strip-components=1 -xvf - ;
+then
+	echo "Failed to unpack LLD Linker sources"
 	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
 fi
 
@@ -177,6 +177,36 @@ fi
 if ! xz -cd polly-7.0.0.src.tar.xz | tar --strip-components=1 -xvf - ;
 then
 	echo "Failed to unpack Polly Optimizer sources"
+	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+fi
+
+fi
+
+################################################################
+# Compiler-RT
+################################################################
+
+if true; then
+
+mkdir -p "$LLVM_SOURCE_DIR/projects"
+cd "$LLVM_SOURCE_DIR/projects"
+
+if [[ ! -f compiler-rt-7.0.0.src.tar.xz ]];
+then
+	if ! wget https://releases.llvm.org/7.0.0/compiler-rt-7.0.0.src.tar.xz;
+	then
+		echo "Attempting download Compiler-RT using insecure channel."
+		if ! wget --no-check-certificate https://releases.llvm.org/7.0.0/compiler-rt-7.0.0.src.tar.xz;  
+		then
+			echo "Failed to download Compiler-RT sources"
+			[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+		fi
+	fi
+fi
+
+if ! xz -cd compiler-rt-7.0.0.src.tar.xz | tar --strip-components=1 -xvf - ;
+then
+	echo "Failed to unpack Compiler-RT sources"
 	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
 fi
 
