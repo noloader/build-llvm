@@ -31,7 +31,7 @@ then
 	if ! wget https://releases.llvm.org/7.0.0/llvm-7.0.0.src.tar.xz;
 	then
 		echo "Attempting download LLVM using insecure channel."
-		if ! --no-check-certificate wget https://releases.llvm.org/7.0.0/llvm-7.0.0.src.tar.xz;  
+		if ! wget --no-check-certificate https://releases.llvm.org/7.0.0/llvm-7.0.0.src.tar.xz;  
 		then
 			echo "Failed to download LLVM sources"
 			[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
@@ -44,7 +44,7 @@ then
 	if ! wget https://releases.llvm.org/7.0.0/cfe-7.0.0.src.tar.xz;
 	then
 		echo "Attempting download Compiler Front End using insecure channel."
-		if ! --no-check-certificate wget https://releases.llvm.org/7.0.0/cfe-7.0.0.src.tar.xz;  
+		if ! wget --no-check-certificate https://releases.llvm.org/7.0.0/cfe-7.0.0.src.tar.xz;  
 		then
 			echo "Failed to download Compiler Front End sources"
 			[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
@@ -57,7 +57,7 @@ then
 	if ! wget https://releases.llvm.org/7.0.0/compiler-rt-7.0.0.src.tar.xz;
 	then
 		echo "Attempting download LLVM using insecure channel."
-		if ! --no-check-certificate wget https://releases.llvm.org/7.0.0/compiler-rt-7.0.0.src.tar.xz;  
+		if ! wget --no-check-certificate https://releases.llvm.org/7.0.0/compiler-rt-7.0.0.src.tar.xz;  
 		then
 			echo "Failed to download LLVM sources"
 			[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
