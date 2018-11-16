@@ -25,6 +25,9 @@
 # Variables
 ################################################################
 
+# Where to install the artifacts
+BUILD_SCRIPT_INSTALL_PREFIX="/opt/llvm"
+
 # There must be an llvm/ in $BUILD_SCRIPT_SOURCE_DIR
 BUILD_SCRIPT_SOURCE_DIR="$HOME/llvm_source/llvm"
 BUILD_SCRIPT_BUILD_DIR="$HOME/llvm_build"
@@ -341,7 +344,7 @@ fi
 cd "$BUILD_SCRIPT_BUILD_DIR"
 
 CMAKE_ARGS=()
-CMAKE_ARGS+=(-DCMAKE_INSTALL_PREFIX="/opt/llvm")
+CMAKE_ARGS+=(-DCMAKE_INSTALL_PREFIX="$BUILD_SCRIPT_INSTALL_PREFIX")
 CMAKE_ARGS+=(-DLLVM_TARGETS_TO_BUILD="$BUILD_SCRIPT_TARGET_ARCH")
 CMAKE_ARGS+=(-DLLVM_PARALLEL_COMPILE_JOBS="4")
 CMAKE_ARGS+=(-DLLVM_INCLUDE_TOOLS="ON")
