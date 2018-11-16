@@ -10,7 +10,7 @@
 # Variables
 ################################################################
 
-# Cmake location. Defaults to cmake program
+# Default programs and locations
 CC="${CC:-gcc}"
 CXX="${CXX:-g++}"
 PREFIX="$HOME/cmake"

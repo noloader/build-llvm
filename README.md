@@ -25,6 +25,12 @@ LLVM requires GCC 4.8 or above to compile the source code. The script honors alt
 CC=/opt/local/bin/gcc-mp-5 CXX=/opt/local/bin/g++-mp-5 ./build-llvm.sh
 ```
 
+And if you need an alternate CMake to satisfy LLVM requirements:
+
+```
+CMAKE=/opt/local/bin/cmake ./build-llvm.sh
+```
+
 # Installing the toolchain
 
 You have to manually install the toolchain after building it, if desired. Perform the following steps to install the toolchain:
