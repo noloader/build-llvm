@@ -5,15 +5,19 @@
 # Written and placed in public domain by Jeffrey Walton and Uri Blumenthal.
 # This scripts builds the latest LLVM release from sources. The script is
 # pieced together from the following web pages:
-#  - https://llvm.org/docs/GettingStarted.html#getting-started-quickly-a-summary
-#  - https://llvm.org/docs/CMake.html#quick-start
 #
-# If you find a LLVM provided script you should use it instead. I could not
-# find one so I am suffering the build process like hundreds of other developers
-# before me.
+#  - https://llvm.org/docs/GettingStarted.html
+#  - https://llvm.org/docs/CMake.html
+#  - https://releases.llvm.org/download.html
+#
+# If you find a LLVM provided script you should use it instead. We could not
+# find one so we are suffering the build process like hundreds of other
+# developers before us.
 
 # TODO
 #
+#  - investiagte RPATHs using ${ORIGIN}. Also see https://bit.ly/2RW4CGL
+#  - investiagte install_names on OS X
 #  - set LLVM_BUILD_TESTS="ON" eventually
 #
 
@@ -21,19 +25,32 @@
 # Variables
 ################################################################
 
-# There must be an llvm/ in $LLVM_SOURCE_DIR
-LLVM_SOURCE_DIR="$HOME/llvm_source/llvm"
-LLVM_BUILD_DIR="$HOME/llvm_build"
+# There must be an llvm/ in $BUILD_SCRIPT_SOURCE_DIR
+BUILD_SCRIPT_SOURCE_DIR="$HOME/llvm_source/llvm"
+BUILD_SCRIPT_BUILD_DIR="$HOME/llvm_build"
 
 # LLVM_VERSION="7.0.0"
-LLVM_ARCH="Unknown"
+BUILD_SCRIPT_TARGET_ARCH="Unknown"
 
-THIS_HOST=$(uname -m)
-case "$THIS_HOST" in
-	"x86_64")
-		LLVM_ARCH="X86" ;;
-	"Power Macintosh")
-		LLVM_ARCH="PowerPC" ;;
+# https://llvm.org/docs/GettingStarted.html#local-llvm-configuration
+BUILD_SCRIPT_HOST=$(uname -m)
+if [[ $(uname -s) = "AIX" ]]; then
+	BUILD_SCRIPT_HOST="AIX";
+fi
+
+case "$BUILD_SCRIPT_HOST" in
+	"i86pc|i*86|x86_64|amd64")
+		BUILD_SCRIPT_TARGET_ARCH="X86" ;;
+	"aix|ppc|Power Macintosh")
+		BUILD_SCRIPT_TARGET_ARCH="PowerPC" ;;
+	"arm|eabihf")
+		BUILD_SCRIPT_TARGET_ARCH="ARM" ;;
+	"aarch32|aarch64")
+		BUILD_SCRIPT_TARGET_ARCH="Aarch64" ;;
+	"mips")
+		BUILD_SCRIPT_TARGET_ARCH="Mips" ;;
+	"sun|sparc")
+		BUILD_SCRIPT_TARGET_ARCH="Sparc" ;;
 	*)
 		echo "Unknown architecture"
 		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
@@ -54,19 +71,19 @@ trap finish EXIT
 # Setup and clean old caches
 ################################################################
 
-if [[ -d "$LLVM_BUILD_DIR" ]]; then
-	rm -rf "$LLVM_BUILD_DIR"
+if [[ -d "$BUILD_SCRIPT_BUILD_DIR" ]]; then
+	rm -rf "$BUILD_SCRIPT_BUILD_DIR"
 fi
 
-mkdir -p "$LLVM_SOURCE_DIR"
-mkdir -p "$LLVM_BUILD_DIR"
+mkdir -p "$BUILD_SCRIPT_SOURCE_DIR"
+mkdir -p "$BUILD_SCRIPT_BUILD_DIR"
 
 ################################################################
 # LLVM base
 ################################################################
 
-mkdir -p "$LLVM_SOURCE_DIR"
-cd "$LLVM_SOURCE_DIR"
+mkdir -p "$BUILD_SCRIPT_SOURCE_DIR"
+cd "$BUILD_SCRIPT_SOURCE_DIR"
 
 if [[ ! -f llvm-7.0.0.src.tar.xz ]];
 then
@@ -95,8 +112,8 @@ fi
 # Clang front end
 ################################################################
 
-mkdir -p "$LLVM_SOURCE_DIR/tools/clang"
-cd "$LLVM_SOURCE_DIR/tools/clang"
+mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/tools/clang"
+cd "$BUILD_SCRIPT_SOURCE_DIR/tools/clang"
 
 if [[ ! -f cfe-7.0.0.src.tar.xz ]];
 then
@@ -125,8 +142,8 @@ fi
 # Clang Tools
 ################################################################
 
-mkdir -p "$LLVM_SOURCE_DIR/tools/clang/tools/extra"
-cd "$LLVM_SOURCE_DIR/tools/clang/tools/extra"
+mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/tools/clang/tools/extra"
+cd "$BUILD_SCRIPT_SOURCE_DIR/tools/clang/tools/extra"
 
 if [[ ! -f clang-tools-extra-7.0.0.src.tar.xz ]];
 then
@@ -155,8 +172,8 @@ fi
 # LLD Linker
 ################################################################
 
-mkdir -p "$LLVM_SOURCE_DIR/tools/lld"
-cd "$LLVM_SOURCE_DIR/tools/lld"
+mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/tools/lld"
+cd "$BUILD_SCRIPT_SOURCE_DIR/tools/lld"
 
 if [[ ! -f lld-7.0.0.src.tar.xz ]];
 then
@@ -185,8 +202,8 @@ fi
 # Polly optimizer
 ################################################################
 
-mkdir -p "$LLVM_SOURCE_DIR/tools/polly"
-cd "$LLVM_SOURCE_DIR/tools/polly"
+mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/tools/polly"
+cd "$BUILD_SCRIPT_SOURCE_DIR/tools/polly"
 
 if [[ ! -f polly-7.0.0.src.tar.xz ]];
 then
@@ -215,8 +232,8 @@ fi
 # Compiler-RT
 ################################################################
 
-mkdir -p "$LLVM_SOURCE_DIR/projects/compiler-rt"
-cd "$LLVM_SOURCE_DIR/projects/compiler-rt"
+mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/projects/compiler-rt"
+cd "$BUILD_SCRIPT_SOURCE_DIR/projects/compiler-rt"
 
 if [[ ! -f compiler-rt-7.0.0.src.tar.xz ]];
 then
@@ -245,8 +262,8 @@ fi
 # libc++
 ################################################################
 
-mkdir -p "$LLVM_SOURCE_DIR/projects/libcxx"
-cd "$LLVM_SOURCE_DIR/projects/libcxx"
+mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/projects/libcxx"
+cd "$BUILD_SCRIPT_SOURCE_DIR/projects/libcxx"
 
 if [[ ! -f libcxx-7.0.0.src.tar.xz ]];
 then
@@ -275,8 +292,8 @@ fi
 # libc++abi
 ################################################################
 
-mkdir -p "$LLVM_SOURCE_DIR/projects/libcxxabi"
-cd "$LLVM_SOURCE_DIR/projects/libcxxabi"
+mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/projects/libcxxabi"
+cd "$BUILD_SCRIPT_SOURCE_DIR/projects/libcxxabi"
 
 if [[ ! -f libcxxabi-7.0.0.src.tar.xz ]];
 then
@@ -305,29 +322,30 @@ fi
 # Build
 ################################################################
 
-cd "$LLVM_BUILD_DIR"
+cd "$BUILD_SCRIPT_BUILD_DIR"
 
 CMAKE_ARGS=()
 CMAKE_ARGS+=(-DCMAKE_INSTALL_PREFIX="/opt/llvm")
-CMAKE_ARGS+=(-DLLVM_TARGETS_TO_BUILD="$LLVM_ARCH")
-# CMAKE_ARGS+=(-DLLVM_SRC_ROOT="$LLVM_SOURCE_DIR")
+CMAKE_ARGS+=(-DLLVM_TARGETS_TO_BUILD="$BUILD_SCRIPT_TARGET_ARCH")
 CMAKE_ARGS+=(-DLLVM_PARALLEL_COMPILE_JOBS="4")
 CMAKE_ARGS+=(-DLLVM_INCLUDE_TOOLS="ON")
 CMAKE_ARGS+=(-DLLVM_BUILD_TESTS="OFF")
 
+# Add CC and CXX to CMake if provided in the environment.
 if [[ ! -z "$CC" ]]; then
 	CMAKE_ARGS+=(-DCMAKE_C_COMPILER="$CC")
 fi
-
 if [[ ! -z "$CXX" ]]; then
 	CMAKE_ARGS+=(-DCMAKE_CXX_COMPILER="$CXX")
 fi
 
-echo "*****************************************************************************"
-echo "CMake arguments: ${CMAKE_ARGS[@]}"
-echo "*****************************************************************************"
+if false; then
+	echo "*****************************************************************************"
+	echo "CMake arguments: ${CMAKE_ARGS[@]}"
+	echo "*****************************************************************************"
+fi
 
-if ! cmake "${CMAKE_ARGS[@]}" "$LLVM_SOURCE_DIR";
+if ! cmake "${CMAKE_ARGS[@]}" "$BUILD_SCRIPT_SOURCE_DIR";
 then
 	echo "Failed to cmake LLVM sources"
 	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
@@ -347,11 +365,11 @@ fi
 
 echo "*****************************************************************************"
 echo "It looks like the build and test succeeded. You next step are:"
-echo "  cd $LLVM_BUILD_DIR"
+echo "  cd $BUILD_SCRIPT_BUILD_DIR"
 echo "  sudo make install"
 echo "Then, optionally:"
 echo "  cd .."
-echo "  rm -rf \"$LLVM_SOURCE_DIR\" \"$LLVM_BUILD_DIR\""
+echo "  rm -rf \"$BUILD_SCRIPT_SOURCE_DIR\" \"$BUILD_SCRIPT_BUILD_DIR\""
 echo "*****************************************************************************"
 
 [[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 0 || return 0
