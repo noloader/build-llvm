@@ -93,7 +93,7 @@ fi
 
 cd "$LLVM_BUILD_DIR"
 
-if ! cmake -DCMAKE_INSTALL_PREFIX="/opt/llvm" -DLLVM_TARGETS_TO_BUILD="PowerPC" -DLLVM_INCLUDE_TOOLS="ON" -DLLVM_BUILD_TESTS="ON" "$LLVM_SOURCE_DIR";
+if ! cmake -DCMAKE_INSTALL_PREFIX="/opt/llvm" -DLLVM_SRC_ROOT="$LLVM_SOURCE_DIR" -DLLVM_TARGETS_TO_BUILD="PowerPC" -DLLVM_INCLUDE_TOOLS="ON" -DLLVM_BUILD_TESTS="ON" "$LLVM_SOURCE_DIR";
 then
 	echo "Failed to build LLVM sources"
 	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
