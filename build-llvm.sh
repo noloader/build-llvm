@@ -68,8 +68,8 @@ fi
 
 if true; then
 
-mkdir -p "$LLVM_SOURCE_DIR/llvm/tools"
-cd "$LLVM_SOURCE_DIR/llvm/tools"
+mkdir -p "$LLVM_SOURCE_DIR/tools"
+cd "$LLVM_SOURCE_DIR/tools"
 
 if [[ ! -f cfe-7.0.0.src.tar.xz ]];
 then
@@ -98,8 +98,8 @@ fi
 
 if true; then
 
-mkdir -p "$LLVM_SOURCE_DIR/llvm/projects"
-cd "$LLVM_SOURCE_DIR/llvm/projects"
+mkdir -p "$LLVM_SOURCE_DIR/projects"
+cd "$LLVM_SOURCE_DIR/projects"
 
 if [[ ! -f compiler-rt-7.0.0.src.tar.xz ]];
 then
@@ -128,8 +128,8 @@ fi
 
 if true; then
 
-mkdir -p "$LLVM_SOURCE_DIR/llvm/tools/clang/tools"
-cd "$LLVM_SOURCE_DIR/llvm/tools/clang/tools"
+mkdir -p "$LLVM_SOURCE_DIR/tools/clang/tools"
+cd "$LLVM_SOURCE_DIR/tools/clang/tools"
 
 if [[ ! -f clang-tools-extra-7.0.0.src.tar.xz ]];
 then
@@ -158,8 +158,8 @@ fi
 
 if true; then
 
-mkdir -p "$LLVM_SOURCE_DIR/llvm/tools"
-cd "$LLVM_SOURCE_DIR/llvm/tools"
+mkdir -p "$LLVM_SOURCE_DIR/tools"
+cd "$LLVM_SOURCE_DIR/tools"
 
 if [[ ! -f polly-7.0.0.src.tar.xz ]];
 then
