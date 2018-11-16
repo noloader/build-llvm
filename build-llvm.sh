@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # build-llvm.sh - LLVM and component build script.
-# 
+#
 # Written and placed in public domain by Jeffrey Walton and Uri Blumenthal.
 # This scripts builds the latest LLVM release from sources. The script is
 # pieced together from the following web pages:
@@ -106,7 +106,7 @@ then
 	if ! wget https://releases.llvm.org/7.0.0/llvm-7.0.0.src.tar.xz;
 	then
 		echo "Attempting download LLVM using insecure channel."
-		if ! wget --no-check-certificate https://releases.llvm.org/7.0.0/llvm-7.0.0.src.tar.xz;  
+		if ! wget --no-check-certificate https://releases.llvm.org/7.0.0/llvm-7.0.0.src.tar.xz;
 		then
 			echo "Failed to download LLVM sources"
 			[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
@@ -136,7 +136,7 @@ then
 	if ! wget https://releases.llvm.org/7.0.0/cfe-7.0.0.src.tar.xz;
 	then
 		echo "Attempting download Clang front end using insecure channel."
-		if ! wget --no-check-certificate https://releases.llvm.org/7.0.0/cfe-7.0.0.src.tar.xz;  
+		if ! wget --no-check-certificate https://releases.llvm.org/7.0.0/cfe-7.0.0.src.tar.xz;
 		then
 			echo "Failed to download Clang front end sources"
 			[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
@@ -166,7 +166,7 @@ then
 	if ! wget https://releases.llvm.org/7.0.0/clang-tools-extra-7.0.0.src.tar.xz;
 	then
 		echo "Attempting download Clang Tools using insecure channel."
-		if ! wget --no-check-certificate https://releases.llvm.org/7.0.0/clang-tools-extra-7.0.0.src.tar.xz;  
+		if ! wget --no-check-certificate https://releases.llvm.org/7.0.0/clang-tools-extra-7.0.0.src.tar.xz;
 		then
 			echo "Failed to download Clang Tools sources"
 			[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
@@ -196,7 +196,7 @@ then
 	if ! wget https://releases.llvm.org/7.0.0/lld-7.0.0.src.tar.xz;
 	then
 		echo "Attempting download LLD Linker using insecure channel."
-		if ! wget --no-check-certificate https://releases.llvm.org/7.0.0/lld-7.0.0.src.tar.xz;  
+		if ! wget --no-check-certificate https://releases.llvm.org/7.0.0/lld-7.0.0.src.tar.xz;
 		then
 			echo "Failed to download LLD Linker sources"
 			[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
@@ -226,7 +226,7 @@ then
 	if ! wget https://releases.llvm.org/7.0.0/polly-7.0.0.src.tar.xz;
 	then
 		echo "Attempting download Polly Optimizer using insecure channel."
-		if ! wget --no-check-certificate https://releases.llvm.org/7.0.0/polly-7.0.0.src.tar.xz;  
+		if ! wget --no-check-certificate https://releases.llvm.org/7.0.0/polly-7.0.0.src.tar.xz;
 		then
 			echo "Failed to download Polly Optimizer sources"
 			[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
@@ -256,7 +256,7 @@ then
 	if ! wget https://releases.llvm.org/7.0.0/compiler-rt-7.0.0.src.tar.xz;
 	then
 		echo "Attempting download Compiler-RT using insecure channel."
-		if ! wget --no-check-certificate https://releases.llvm.org/7.0.0/compiler-rt-7.0.0.src.tar.xz; 
+		if ! wget --no-check-certificate https://releases.llvm.org/7.0.0/compiler-rt-7.0.0.src.tar.xz;
 		then
 			echo "Failed to download Compiler-RT sources"
 			[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
@@ -286,7 +286,7 @@ then
 	if ! wget https://releases.llvm.org/7.0.0/libcxx-7.0.0.src.tar.xz;
 	then
 		echo "Attempting download libc++ using insecure channel."
-		if ! wget --no-check-certificate https://releases.llvm.org/7.0.0/libcxx-7.0.0.src.tar.xz;  
+		if ! wget --no-check-certificate https://releases.llvm.org/7.0.0/libcxx-7.0.0.src.tar.xz;
 		then
 			echo "Failed to download libc++ sources"
 			[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
@@ -316,7 +316,7 @@ then
 	if ! wget https://releases.llvm.org/7.0.0/libcxxabi-7.0.0.src.tar.xz;
 	then
 		echo "Attempting download libc++abi using insecure channel."
-		if ! wget --no-check-certificate https://releases.llvm.org/7.0.0/libcxxabi-7.0.0.src.tar.xz; 
+		if ! wget --no-check-certificate https://releases.llvm.org/7.0.0/libcxxabi-7.0.0.src.tar.xz;
 		then
 			echo "Failed to download libc++abi sources"
 			[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
