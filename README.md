@@ -42,6 +42,6 @@ sudo make install
 
 You can also delete `BUILD_SCRIPT_SOURCE_DIR` and `BUILD_SCRIPT_BUILD_DIR` after installation.
 
-# Build CMake
+# Building CMake
 
-LLVM requires CMake 2.12 or higher. There is a script called `build-cmake.sh` which provides an updated CMake if needed. The script builds in the `cmake_build` directory and installs itself at `$HOME/cmake`. You can change the variables by editing the top of the script.
+LLVM requires CMake 2.12 or higher. You can use `build-cmake.sh` to update CMake if needed. The script builds in the `cmake_build` directory and installs itself at `$HOME/cmake`. You can change the variables by editing the top of the script.
