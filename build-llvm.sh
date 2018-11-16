@@ -39,17 +39,33 @@ if [[ $(uname -s) = "AIX" ]]; then
 fi
 
 case "$BUILD_SCRIPT_HOST" in
-	"i86pc|i*86|x86_64|amd64")
+	"i86pc")
 		BUILD_SCRIPT_TARGET_ARCH="X86" ;;
-	"aix|ppc|Power Macintosh")
+	"i.86")
+		BUILD_SCRIPT_TARGET_ARCH="X86" ;;
+	"x86_64")
+		BUILD_SCRIPT_TARGET_ARCH="X86" ;;
+	"amd64")
+		BUILD_SCRIPT_TARGET_ARCH="X86" ;;
+	"aix")
 		BUILD_SCRIPT_TARGET_ARCH="PowerPC" ;;
-	"arm|eabihf")
+	"ppc*")
+		BUILD_SCRIPT_TARGET_ARCH="PowerPC" ;;
+	"Power Macintosh")
+		BUILD_SCRIPT_TARGET_ARCH="PowerPC" ;;
+	"arm*")
 		BUILD_SCRIPT_TARGET_ARCH="ARM" ;;
-	"aarch32|aarch64")
+	"eabihf")
+		BUILD_SCRIPT_TARGET_ARCH="ARM" ;;
+	"aarch32")
 		BUILD_SCRIPT_TARGET_ARCH="Aarch64" ;;
-	"mips")
+	"aarch64")
+		BUILD_SCRIPT_TARGET_ARCH="Aarch64" ;;
+	"mips*")
 		BUILD_SCRIPT_TARGET_ARCH="Mips" ;;
-	"sun|sparc")
+	"sun")
+		BUILD_SCRIPT_TARGET_ARCH="Sparc" ;;
+	"sparc")
 		BUILD_SCRIPT_TARGET_ARCH="Sparc" ;;
 	*)
 		echo "Unknown architecture"
