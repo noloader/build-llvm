@@ -94,8 +94,8 @@ fi
 # Clang front end
 ################################################################
 
-mkdir -p "$LLVM_SOURCE_DIR/tools"
-cd "$LLVM_SOURCE_DIR/tools"
+mkdir -p "$LLVM_SOURCE_DIR/tools/clang"
+cd "$LLVM_SOURCE_DIR/tools/clang"
 
 if [[ ! -f cfe-7.0.0.src.tar.xz ]];
 then
@@ -124,8 +124,8 @@ fi
 # Clang Tools
 ################################################################
 
-mkdir -p "$LLVM_SOURCE_DIR/tools/clang/tools"
-cd "$LLVM_SOURCE_DIR/tools/clang/tools"
+mkdir -p "$LLVM_SOURCE_DIR/tools/clang/tools/extra"
+cd "$LLVM_SOURCE_DIR/tools/clang/tools/extra"
 
 if [[ ! -f clang-tools-extra-7.0.0.src.tar.xz ]];
 then
@@ -154,8 +154,8 @@ fi
 # LLD Linker
 ################################################################
 
-mkdir -p "$LLVM_SOURCE_DIR/tools"
-cd "$LLVM_SOURCE_DIR/tools"
+mkdir -p "$LLVM_SOURCE_DIR/tools/lld"
+cd "$LLVM_SOURCE_DIR/tools/lld"
 
 if [[ ! -f lld-7.0.0.src.tar.xz ]];
 then
@@ -184,8 +184,8 @@ fi
 # Polly optimizer
 ################################################################
 
-mkdir -p "$LLVM_SOURCE_DIR/tools"
-cd "$LLVM_SOURCE_DIR/tools"
+mkdir -p "$LLVM_SOURCE_DIR/tools/polly"
+cd "$LLVM_SOURCE_DIR/tools/polly"
 
 if [[ ! -f polly-7.0.0.src.tar.xz ]];
 then
@@ -214,8 +214,8 @@ fi
 # Compiler-RT
 ################################################################
 
-mkdir -p "$LLVM_SOURCE_DIR/projects"
-cd "$LLVM_SOURCE_DIR/projects"
+mkdir -p "$LLVM_SOURCE_DIR/projects/compiler-rt"
+cd "$LLVM_SOURCE_DIR/projects/compiler-rt"
 
 if [[ ! -f compiler-rt-7.0.0.src.tar.xz ]];
 then
@@ -312,7 +312,7 @@ CMAKE_ARGS+=(-DLLVM_TARGETS_TO_BUILD="$LLVM_ARCH")
 # CMAKE_ARGS+=(-DLLVM_SRC_ROOT="$LLVM_SOURCE_DIR")
 CMAKE_ARGS+=(-DLLVM_PARALLEL_COMPILE_JOBS="4")
 CMAKE_ARGS+=(-DLLVM_INCLUDE_TOOLS="ON")
-# CMAKE_ARGS+=(-DLLVM_BUILD_TESTS="ON")
+CMAKE_ARGS+=(-DLLVM_BUILD_TESTS="OFF")
 
 if [[ ! -z "$CC" ]]; then
 	CMAKE_ARGS+=(-DCMAKE_C_COMPILER="$CC")
