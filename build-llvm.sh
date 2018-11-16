@@ -322,14 +322,35 @@ if [[ ! -z "$CXX" ]]; then
 	CMAKE_ARGS+=(-DCMAKE_CXX_COMPILER="$CXX")
 fi
 
-echo "*******************************************"
+echo "*****************************************************************************"
 echo "CMake arguments: ${CMAKE_ARGS[@]}"
-echo "*******************************************"
+echo "*****************************************************************************"
 
 if ! cmake "${CMAKE_ARGS[@]}" "$LLVM_SOURCE_DIR";
 then
-	echo "Failed to build LLVM sources"
+	echo "Failed to cmake LLVM sources"
 	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
 fi
+
+if ! make VERBOSE=1;
+then
+	echo "Failed to make LLVM sources"
+	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+fi
+
+if ! make test;
+then
+	echo "Failed to test LLVM sources"
+	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+fi
+
+echo "*****************************************************************************"
+echo "It looks like the build and test succeeded. You next step are:"
+echo "  cd $LLVM_BUILD_DIR"
+echo "  sudo make install"
+echo "Then, optionally:"
+echo "  cd .."
+echo "  rm -rf \"$LLVM_SOURCE_DIR\" \"$LLVM_BUILD_DIR\""
+echo "*****************************************************************************"
 
 [[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 0 || return 0
