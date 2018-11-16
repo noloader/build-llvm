@@ -1,7 +1,21 @@
 #!/usr/bin/env bash
 
-# https://llvm.org/docs/GettingStarted.html#getting-started-quickly-a-summary
-# https://llvm.org/docs/CMake.html#quick-start
+# build-llvm.sh - LLVM and component build script.
+# 
+# Written and placed in public domain by Jeffrey Walton. This scripts builds
+# the latest LLVM release from sources. The script is pieced to gether from
+# the following web pages:
+#  - https://llvm.org/docs/GettingStarted.html#getting-started-quickly-a-summary
+#  - https://llvm.org/docs/CMake.html#quick-start
+#
+# If you find a LLVM provided script you should use it instead. I could not
+# find one so I am suffering the build process like hundreds of other developers
+# before me.
+
+# TODO
+#
+#  - set LLVM_BUILD_TESTS="ON" eventually
+#
 
 ################################################################
 # Variables
