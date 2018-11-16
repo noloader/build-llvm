@@ -80,14 +80,14 @@ then
 	fi
 fi
 
-if [[ ! -f llvm-7.0.0.src ]];
+if [[ ! -f llvm-7.0.0.src.unpacked ]];
 then
 	if ! xz -cd llvm-7.0.0.src.tar.xz | tar --strip-components=1 -xvf - ;
 	then
 		echo "Failed to unpack LLVM sources"
 		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
 	fi
-	touch llvm-7.0.0.src
+	touch llvm-7.0.0.src.unpacked
 fi
 
 ################################################################
@@ -110,14 +110,14 @@ then
 	fi
 fi
 
-if [[ ! -f cfe-7.0.0.src ]];
+if [[ ! -f cfe-7.0.0.src.unpacked ]];
 then
 	if ! xz -cd cfe-7.0.0.src.tar.xz | tar --strip-components=1 -xvf - ;
 	then
 		echo "Failed to unpack Clang front end sources"
 		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
 	fi
-	touch cfe-7.0.0.src
+	touch cfe-7.0.0.src.unpacked
 fi
 
 ################################################################
@@ -140,14 +140,14 @@ then
 	fi
 fi
 
-if [[ ! -f clang-tools-extra-7.0.0.src ]];
+if [[ ! -f clang-tools-extra-7.0.0.src.unpacked ]];
 then
 	if ! xz -cd clang-tools-extra-7.0.0.src.tar.xz | tar --strip-components=1 -xvf - ;
 	then
 		echo "Failed to unpack Clang Tools sources"
 		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
 	fi
-	touch clang-tools-extra-7.0.0.src
+	touch clang-tools-extra-7.0.0.src.unpacked
 fi
 
 ################################################################
@@ -170,14 +170,14 @@ then
 	fi
 fi
 
-if [[ ! -f lld-7.0.0.src ]];
+if [[ ! -f lld-7.0.0.src.unpacked ]];
 then
 	if ! xz -cd lld-7.0.0.src.tar.xz | tar --strip-components=1 -xvf - ;
 	then
 		echo "Failed to unpack LLD Linker sources"
 		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
 	fi
-	touch lld-7.0.0.src
+	touch lld-7.0.0.src.unpacked
 fi
 
 ################################################################
@@ -200,14 +200,14 @@ then
 	fi
 fi
 
-if [[ ! -f polly-7.0.0.src ]];
+if [[ ! -f polly-7.0.0.src.unpacked ]];
 then
 	if ! xz -cd polly-7.0.0.src.tar.xz | tar --strip-components=1 -xvf - ;
 	then
 		echo "Failed to unpack Polly Optimizer sources"
 		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
 	fi
-	touch polly-7.0.0.src
+	touch polly-7.0.0.src.unpacked
 fi
 
 ################################################################
@@ -222,7 +222,7 @@ then
 	if ! wget https://releases.llvm.org/7.0.0/compiler-rt-7.0.0.src.tar.xz;
 	then
 		echo "Attempting download Compiler-RT using insecure channel."
-		if ! wget --no-check-certificate https://releases.llvm.org/7.0.0/compiler-rt-7.0.0.src.tar.xz;  
+		if ! wget --no-check-certificate https://releases.llvm.org/7.0.0/compiler-rt-7.0.0.src.tar.xz; 
 		then
 			echo "Failed to download Compiler-RT sources"
 			[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
@@ -230,14 +230,14 @@ then
 	fi
 fi
 
-if [[ ! -f compiler-rt-7.0.0.src ]];
+if [[ ! -f compiler-rt-7.0.0.src.unpacked ]];
 then
 	if ! xz -cd compiler-rt-7.0.0.src.tar.xz | tar --strip-components=1 -xvf - ;
 	then
 		echo "Failed to unpack Compiler-RT sources"
 		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
 	fi
-	touch compiler-rt-7.0.0.src
+	touch compiler-rt-7.0.0.src.unpacked
 fi
 
 ################################################################
@@ -260,14 +260,14 @@ then
 	fi
 fi
 
-if [[ ! -f libcxx-7.0.0.src ]];
+if [[ ! -f libcxx-7.0.0.src.unpacked ]];
 then
 	if ! xz -cd libcxx-7.0.0.src.tar.xz | tar --strip-components=1 -xvf - ;
 	then
 		echo "Failed to unpack libc++ sources"
 		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
 	fi
-	touch libcxx-7.0.0.src
+	touch libcxx-7.0.0.src.unpacked
 fi
 
 ################################################################
@@ -290,14 +290,14 @@ then
 	fi
 fi
 
-if [[ ! -f libcxxabi-7.0.0.src ]];
+if [[ ! -f libcxxabi-7.0.0.src.unpacked ]];
 then
 	if ! xz -cd libcxxabi-7.0.0.src.tar.xz | tar --strip-components=1 -xvf - ;
 	then
 		echo "Failed to unpack libc++abi sources"
 		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
 	fi
-	touch libcxxabi-7.0.0.src
+	touch libcxxabi-7.0.0.src.unpacked
 fi
 
 ################################################################
