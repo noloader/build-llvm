@@ -3,7 +3,7 @@
 # build-llvm.sh - LLVM and component build script.
 # 
 # Written and placed in public domain by Jeffrey Walton. This scripts builds
-# the latest LLVM release from sources. The script is pieced to gether from
+# the latest LLVM release from sources. The script is pieced together from
 # the following web pages:
 #  - https://llvm.org/docs/GettingStarted.html#getting-started-quickly-a-summary
 #  - https://llvm.org/docs/CMake.html#quick-start
@@ -21,7 +21,7 @@
 # Variables
 ################################################################
 
-LLVM_SOURCE_DIR="$HOME/llvm_source"
+LLVM_SOURCE_DIR="$HOME/llvm_source/llvm"
 LLVM_BUILD_DIR="$HOME/llvm_build"
 
 # LLVM_VERSION="7.0.0"
