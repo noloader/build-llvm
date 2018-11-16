@@ -37,8 +37,6 @@ mkdir -p "$LLVM_BUILD_DIR"
 # LLVM base
 ################################################################
 
-if true; then
-
 mkdir -p "$LLVM_SOURCE_DIR"
 cd "$LLVM_SOURCE_DIR"
 
@@ -55,19 +53,19 @@ then
 	fi
 fi
 
-if ! xz -cd llvm-7.0.0.src.tar.xz | tar --strip-components=1 -xvf - ;
+if [[ ! -f llvm-7.0.0.src ]];
 then
-	echo "Failed to unpack LLVM sources"
-	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
-fi
-
+	if ! xz -cd llvm-7.0.0.src.tar.xz | tar --strip-components=1 -xvf - ;
+	then
+		echo "Failed to unpack LLVM sources"
+		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+	fi
+	touch llvm-7.0.0.src
 fi
 
 ################################################################
 # Clang front end
 ################################################################
-
-if true; then
 
 mkdir -p "$LLVM_SOURCE_DIR/tools"
 cd "$LLVM_SOURCE_DIR/tools"
@@ -85,19 +83,19 @@ then
 	fi
 fi
 
-if ! xz -cd cfe-7.0.0.src.tar.xz | tar --strip-components=1 -xvf - ;
+if [[ ! -f cfe-7.0.0.src ]];
 then
-	echo "Failed to unpack Clang front end sources"
-	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
-fi
-
+	if ! xz -cd cfe-7.0.0.src.tar.xz | tar --strip-components=1 -xvf - ;
+	then
+		echo "Failed to unpack Clang front end sources"
+		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+	fi
+	touch cfe-7.0.0.src
 fi
 
 ################################################################
 # Clang Tools
 ################################################################
-
-if true; then
 
 mkdir -p "$LLVM_SOURCE_DIR/tools/clang/tools"
 cd "$LLVM_SOURCE_DIR/tools/clang/tools"
@@ -115,19 +113,19 @@ then
 	fi
 fi
 
-if ! xz -cd clang-tools-extra-7.0.0.src.tar.xz | tar --strip-components=1 -xvf - ;
+if [[ ! -f clang-tools-extra-7.0.0.src ]];
 then
-	echo "Failed to unpack Clang Tools sources"
-	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
-fi
-
+	if ! xz -cd clang-tools-extra-7.0.0.src.tar.xz | tar --strip-components=1 -xvf - ;
+	then
+		echo "Failed to unpack Clang Tools sources"
+		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+	fi
+	touch clang-tools-extra-7.0.0.src
 fi
 
 ################################################################
 # LLD Linker
 ################################################################
-
-if true; then
 
 mkdir -p "$LLVM_SOURCE_DIR/tools"
 cd "$LLVM_SOURCE_DIR/tools"
@@ -145,19 +143,19 @@ then
 	fi
 fi
 
-if ! xz -cd lld-7.0.0.src.tar.xz | tar --strip-components=1 -xvf - ;
+if [[ ! -f lld-7.0.0.src ]];
 then
-	echo "Failed to unpack LLD Linker sources"
-	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
-fi
-
+	if ! xz -cd lld-7.0.0.src.tar.xz | tar --strip-components=1 -xvf - ;
+	then
+		echo "Failed to unpack LLD Linker sources"
+		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+	fi
+	touch lld-7.0.0.src
 fi
 
 ################################################################
 # Polly optimizer
 ################################################################
-
-if true; then
 
 mkdir -p "$LLVM_SOURCE_DIR/tools"
 cd "$LLVM_SOURCE_DIR/tools"
@@ -175,19 +173,19 @@ then
 	fi
 fi
 
-if ! xz -cd polly-7.0.0.src.tar.xz | tar --strip-components=1 -xvf - ;
+if [[ ! -f polly-7.0.0.src ]];
 then
-	echo "Failed to unpack Polly Optimizer sources"
-	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
-fi
-
+	if ! xz -cd polly-7.0.0.src.tar.xz | tar --strip-components=1 -xvf - ;
+	then
+		echo "Failed to unpack Polly Optimizer sources"
+		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+	fi
+	touch polly-7.0.0.src
 fi
 
 ################################################################
 # Compiler-RT
 ################################################################
-
-if true; then
 
 mkdir -p "$LLVM_SOURCE_DIR/projects"
 cd "$LLVM_SOURCE_DIR/projects"
@@ -205,12 +203,14 @@ then
 	fi
 fi
 
-if ! xz -cd compiler-rt-7.0.0.src.tar.xz | tar --strip-components=1 -xvf - ;
+if [[ ! -f compiler-rt-7.0.0.src ]];
 then
-	echo "Failed to unpack Compiler-RT sources"
-	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
-fi
-
+	if ! xz -cd compiler-rt-7.0.0.src.tar.xz | tar --strip-components=1 -xvf - ;
+	then
+		echo "Failed to unpack Compiler-RT sources"
+		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+	fi
+	touch compiler-rt-7.0.0.src
 fi
 
 ################################################################
@@ -221,7 +221,7 @@ cd "$LLVM_BUILD_DIR"
 
 CMAKE_ARGS=()
 CMAKE_ARGS+=(-DCMAKE_INSTALL_PREFIX="/opt/llvm")
-CMAKE_ARGS+=(-DLLVM_TARGETS_TO_BUILD="PowerPC")
+CMAKE_ARGS+=(-DLLVM_TARGETS_TO_BUILD="X86")
 # CMAKE_ARGS+=(-DLLVM_SRC_ROOT="$LLVM_SOURCE_DIR")
 CMAKE_ARGS+=(-DLLVM_PARALLEL_COMPILE_JOBS="4")
 CMAKE_ARGS+=(-DLLVM_INCLUDE_TOOLS="ON")
