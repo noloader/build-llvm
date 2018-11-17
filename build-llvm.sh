@@ -68,7 +68,9 @@ case "$BUILD_SCRIPT_HOST" in
 		BUILD_SCRIPT_TARGET_ARCH="ARM" ;;
 	eabihf)
 		BUILD_SCRIPT_TARGET_ARCH="ARM" ;;
-	aarch*)
+	aarch32)
+		BUILD_SCRIPT_TARGET_ARCH="Aarch64" ;;
+	aarch64)
 		BUILD_SCRIPT_TARGET_ARCH="Aarch64" ;;
 	mips*)
 		BUILD_SCRIPT_TARGET_ARCH="Mips" ;;
@@ -350,6 +352,46 @@ then
 		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
 	fi
 	touch libcxxabi-7.0.0.src.unpacked
+fi
+
+################################################################
+# Test suite
+################################################################
+
+# TODO: Figure out the directory structure
+# TODO: Use the newly built compiler to build the test suite
+#
+# - https://llvm.org/docs/TestingGuide.html
+# - https://llvm.org/docs/TestSuiteGuide.html
+
+if false; then
+
+mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/test-suite"
+cd "$BUILD_SCRIPT_SOURCE_DIR/test-suite"
+
+if [[ ! -f test-suite-7.0.0.src.tar.xz ]];
+then
+	if ! wget https://releases.llvm.org/7.0.0/test-suite-7.0.0.src.tar.xz;
+	then
+		echo "Attempting download Test Suite using insecure channel."
+		if ! wget --no-check-certificate https://releases.llvm.org/7.0.0/test-suite-7.0.0.src.tar.xz;
+		then
+			echo "Failed to download Test Suite sources"
+			[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+		fi
+	fi
+fi
+
+if [[ ! -f test-suite-7.0.0.src.unpacked ]];
+then
+	if ! xz -cd test-suite-7.0.0.src.tar.xz | tar --strip-components=1 -xvf - ;
+	then
+		echo "Failed to unpack Test Suite sources"
+		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+	fi
+	touch test-suite-7.0.0.src.unpacked
+fi
+
 fi
 
 ################################################################
