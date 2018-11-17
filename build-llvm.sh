@@ -25,8 +25,9 @@
 # Variables
 ################################################################
 
-# Cmake location. Defaults to cmake program
+# CMake and Make location. Defaults to cmake program
 CMAKE="${CMAKE:-cmake}"
+MAKE="${MAKE:-make}"
 
 # Where to install the artifacts
 BUILD_SCRIPT_INSTALL_PREFIX="/opt/llvm"
@@ -44,7 +45,7 @@ BUILD_SCRIPT_TARGET_ARCH="Unknown"
 # https://llvm.org/docs/GettingStarted.html#local-llvm-configuration
 BUILD_SCRIPT_HOST=$(uname -m)
 if [[ $(uname -s) = "AIX" ]]; then
-	BUILD_SCRIPT_HOST="AIX";
+	BUILD_SCRIPT_HOST="aix";
 fi
 
 case "$BUILD_SCRIPT_HOST" in
@@ -313,6 +314,15 @@ then
 	touch libcxx-7.0.0.src.unpacked
 fi
 
+# https://bugzilla.redhat.com/show_bug.cgi?id=1538817
+if [[ ! -f thread.patched ]]; then
+	echo "Patching libcxx/include/thread"
+	THIS_FILE=include/thread
+	sed -i "s/_LIBCPP_CONSTEXPR duration<long double> _Max/const duration<long double> _Max/g" "$THIS_FILE" > "$THIS_FILE.patched"
+	mv "$THIS_FILE.patched" "$THIS_FILE"
+	touch thread.patched
+fi
+
 ################################################################
 # libc++abi
 ################################################################
@@ -376,13 +386,13 @@ then
 	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
 fi
 
-if ! make VERBOSE=1;
+if ! "$MAKE" -j "$BUILD_SCRIPT_MAKE_JOBS" VERBOSE=1;
 then
 	echo "Failed to make LLVM sources"
 	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
 fi
 
-if ! make test;
+if ! "$MAKE" -j "$BUILD_SCRIPT_MAKE_JOBS" test;
 then
 	echo "Failed to test LLVM sources"
 	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
