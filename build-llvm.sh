@@ -355,19 +355,57 @@ then
 fi
 
 ################################################################
+# libunwind
+################################################################
+
+# TODO: Figure out how to use this.
+
+if false; then
+
+mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/projects/libunwind"
+cd "$BUILD_SCRIPT_SOURCE_DIR/projects/libunwind"
+
+if [[ ! -f libunwind-7.0.0.src.tar.xz ]];
+then
+	if ! wget https://releases.llvm.org/7.0.0/libunwind-7.0.0.src.tar.xz;
+	then
+		echo "Attempting download libunwind using insecure channel."
+		if ! wget --no-check-certificate https://releases.llvm.org/7.0.0/libunwind-7.0.0.src.tar.xz;
+		then
+			echo "Failed to download libunwind sources"
+			[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+		fi
+	fi
+fi
+
+if [[ ! -f libunwind-7.0.0.src.unpacked ]];
+then
+	if ! xz -cd libunwind-7.0.0.src.tar.xz | tar --strip-components=1 -xvf - ;
+	then
+		echo "Failed to unpack libunwind sources"
+		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+	fi
+	touch libunwind-7.0.0.src.unpacked
+fi
+
+fi
+
+################################################################
 # Test suite
 ################################################################
 
 # TODO: Figure out the directory structure
 # TODO: Use the newly built compiler to build the test suite
+# TODO: Turn LLVM_BUILD_TESTS to ON
 #
 # - https://llvm.org/docs/TestingGuide.html
 # - https://llvm.org/docs/TestSuiteGuide.html
 
-if false; then
+# if false; then
 
-mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/test-suite"
-cd "$BUILD_SCRIPT_SOURCE_DIR/test-suite"
+# https://llvm.org/docs/GettingStarted.html#checkout-llvm-from-subversion
+mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/projects/test-suite"
+cd "$BUILD_SCRIPT_SOURCE_DIR/projects/test-suite"
 
 if [[ ! -f test-suite-7.0.0.src.tar.xz ]];
 then
@@ -392,7 +430,7 @@ then
 	touch test-suite-7.0.0.src.unpacked
 fi
 
-fi
+# fi
 
 ################################################################
 # Build
@@ -404,6 +442,7 @@ CMAKE_ARGS=()
 CMAKE_ARGS+=(-DCMAKE_INSTALL_PREFIX="$BUILD_SCRIPT_INSTALL_PREFIX")
 CMAKE_ARGS+=(-DLLVM_TARGETS_TO_BUILD="$BUILD_SCRIPT_TARGET_ARCH")
 CMAKE_ARGS+=(-DLLVM_PARALLEL_COMPILE_JOBS="$BUILD_SCRIPT_COMPILE_JOBS")
+CMAKE_ARGS+=(-DCMAKE_BUILD_TYPE="Release")
 CMAKE_ARGS+=(-DLLVM_INCLUDE_TOOLS="ON")
 CMAKE_ARGS+=(-DLLVM_BUILD_TESTS="OFF")
 
