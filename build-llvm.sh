@@ -37,7 +37,7 @@ BUILD_SCRIPT_SOURCE_DIR="$HOME/llvm_source/llvm"
 BUILD_SCRIPT_BUILD_DIR="$HOME/llvm_build"
 
 # Concurrent make jobs
-BUILD_SCRIPT_MAKE_JOBS="4"
+BUILD_SCRIPT_COMPILE_JOBS="4"
 
 # LLVM_VERSION="7.0.0"
 BUILD_SCRIPT_TARGET_ARCH="Unknown"
@@ -362,7 +362,7 @@ cd "$BUILD_SCRIPT_BUILD_DIR"
 CMAKE_ARGS=()
 CMAKE_ARGS+=(-DCMAKE_INSTALL_PREFIX="$BUILD_SCRIPT_INSTALL_PREFIX")
 CMAKE_ARGS+=(-DLLVM_TARGETS_TO_BUILD="$BUILD_SCRIPT_TARGET_ARCH")
-CMAKE_ARGS+=(-DLLVM_PARALLEL_COMPILE_JOBS="$BUILD_SCRIPT_MAKE_JOBS")
+CMAKE_ARGS+=(-DLLVM_PARALLEL_COMPILE_JOBS="$BUILD_SCRIPT_COMPILE_JOBS")
 CMAKE_ARGS+=(-DLLVM_INCLUDE_TOOLS="ON")
 CMAKE_ARGS+=(-DLLVM_BUILD_TESTS="OFF")
 
@@ -374,7 +374,7 @@ if [[ ! -z "$CXX" ]]; then
 	CMAKE_ARGS+=(-DCMAKE_CXX_COMPILER="$CXX")
 fi
 
-if false; then
+if true; then
 	echo "*****************************************************************************"
 	echo "CMake arguments: ${CMAKE_ARGS[@]}"
 	echo "*****************************************************************************"
@@ -386,13 +386,13 @@ then
 	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
 fi
 
-if ! "$MAKE" -j "$BUILD_SCRIPT_MAKE_JOBS" VERBOSE=1;
+if ! "$MAKE" -j "$BUILD_SCRIPT_COMPILE_JOBS" VERBOSE=1;
 then
 	echo "Failed to make LLVM sources"
 	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
 fi
 
-if ! "$MAKE" -j "$BUILD_SCRIPT_MAKE_JOBS" test;
+if ! "$MAKE" -j "$BUILD_SCRIPT_COMPILE_JOBS" test;
 then
 	echo "Failed to test LLVM sources"
 	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
