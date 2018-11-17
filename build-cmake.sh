@@ -10,7 +10,7 @@
 # Variables
 ################################################################
 
-# Default programs and locations
+# Default programs and locations. CMake requires GCC on AIX
 CC="${CC:-gcc}"
 CXX="${CXX:-g++}"
 PREFIX="$HOME/cmake"
