@@ -68,9 +68,7 @@ case "$BUILD_SCRIPT_HOST" in
 		BUILD_SCRIPT_TARGET_ARCH="ARM" ;;
 	eabihf)
 		BUILD_SCRIPT_TARGET_ARCH="ARM" ;;
-	aarch32)
-		BUILD_SCRIPT_TARGET_ARCH="Aarch64" ;;
-	aarch64)
+	aarch*)
 		BUILD_SCRIPT_TARGET_ARCH="Aarch64" ;;
 	mips*)
 		BUILD_SCRIPT_TARGET_ARCH="Mips" ;;
