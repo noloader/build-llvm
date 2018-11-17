@@ -16,6 +16,7 @@
 
 # TODO
 #
+#  - port to Solaris (tar and --strip-component)
 #  - investiagte RPATHs using ${ORIGIN}. Also see https://bit.ly/2RW4CGL
 #  - investiagte install_names on OS X
 #  - set LLVM_BUILD_TESTS="ON" eventually
