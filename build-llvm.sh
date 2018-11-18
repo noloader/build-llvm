@@ -35,6 +35,9 @@
 CMAKE="${CMAKE:-cmake}"
 MAKE="${MAKE:-make}"
 
+# libcxx and libcxxabi recipes are broken
+BUILD_SCRIPT_LIBCXX=false
+
 # Where to install the artifacts
 BUILD_SCRIPT_INSTALL_PREFIX="/opt/llvm"
 
@@ -294,7 +297,7 @@ fi
 # libc++
 ################################################################
 
-if false; then
+if test "$BUILD_SCRIPT_LIBCXX"; then
 
 mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/projects/libcxx"
 cd "$BUILD_SCRIPT_SOURCE_DIR/projects/libcxx"
@@ -322,13 +325,17 @@ then
 	touch libcxx-7.0.0.src.unpacked
 fi
 
-# https://bugzilla.redhat.com/show_bug.cgi?id=1538817
-if [[ ! -f thread.patched ]]; then
-	echo "Patching libcxx/include/thread"
-	THIS_FILE=include/thread
-	sed -i "s/_LIBCPP_CONSTEXPR duration<long double> _Max/const duration<long double> _Max/g" "$THIS_FILE" > "$THIS_FILE.patched"
-	mv "$THIS_FILE.patched" "$THIS_FILE"
-	touch thread.patched
+if [[ "$BUILD_SCRIPT_TARGET_ARCH" = "PowerPC" ]];
+then
+	# https://bugzilla.redhat.com/show_bug.cgi?id=1538817
+	if [[ ! -f thread.patched ]];
+	then
+		echo "Patching libcxx/include/thread"
+		THIS_FILE=include/thread
+		sed -i "s/_LIBCPP_CONSTEXPR duration<long double> _Max/const duration<long double> _Max/g" "$THIS_FILE" > "$THIS_FILE.patched"
+		mv "$THIS_FILE.patched" "$THIS_FILE"
+		touch thread.patched
+	fi
 fi
 
 fi
@@ -337,7 +344,7 @@ fi
 # libc++abi
 ################################################################
 
-if false; then
+if test "$BUILD_SCRIPT_LIBCXX"; then
 
 mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/projects/libcxxabi"
 cd "$BUILD_SCRIPT_SOURCE_DIR/projects/libcxxabi"
@@ -371,7 +378,8 @@ fi
 # libunwind
 ################################################################
 
-# TODO: Figure out how to use this.
+# TODO: Figure out how and when to use this.
+# https://bcain-llvm.readthedocs.io/projects/libunwind/
 
 if false; then
 
@@ -407,7 +415,6 @@ fi
 # Test suite
 ################################################################
 
-# TODO: Figure out the directory structure
 # TODO: Use the newly built compiler to build the test suite
 # TODO: Turn LLVM_BUILD_TESTS to ON
 #
@@ -468,9 +475,11 @@ if [[ ! -z "$CXX" ]]; then
 fi
 
 if true; then
+	echo
 	echo "*****************************************************************************"
 	echo "CMake arguments: ${CMAKE_ARGS[@]}"
 	echo "*****************************************************************************"
+	echo
 fi
 
 if ! "$CMAKE" "${CMAKE_ARGS[@]}" "$BUILD_SCRIPT_SOURCE_DIR";
@@ -485,7 +494,7 @@ then
 	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
 fi
 
-if ! "$MAKE" -j "$BUILD_SCRIPT_COMPILE_JOBS" test;
+if ! "$MAKE" -j "$BUILD_SCRIPT_COMPILE_JOBS" check;
 then
 	echo "Failed to test LLVM sources"
 	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
