@@ -34,6 +34,17 @@
 # CMake and Make location. Defaults to program on-path
 CMAKE="${CMAKE:-cmake}"
 MAKE="${MAKE:-make}"
+TAR="${TAR:-tar}"
+
+# AIX and Solaris override
+if [[ "$MAKE" = "make" ]] && [[ -f "/usr/bin/gmake" ]]; then
+	MAKE=/usr/bin/gmake
+fi
+
+# AIX and Solaris override
+if [[ "$TAR" = "tar" ]] && [[ -f "/usr/linux/bin/tar" ]]; then
+	TAR=/usr/linux/bin/tar
+fi
 
 # libcxx and libcxxabi recipes are broken. Do they work anywhere?
 BUILD_SCRIPT_LIBCXX=false
@@ -139,7 +150,7 @@ fi
 
 if [[ ! -f llvm-7.0.0.src.unpacked ]];
 then
-	if ! xz -cd llvm-7.0.0.src.tar.xz | tar --strip-components=1 -xvf - ;
+	if ! xz -cd llvm-7.0.0.src.tar.xz | "$TAR" --strip-components=1 -xvf - ;
 	then
 		echo "Failed to unpack LLVM sources"
 		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
@@ -169,7 +180,7 @@ fi
 
 if [[ ! -f cfe-7.0.0.src.unpacked ]];
 then
-	if ! xz -cd cfe-7.0.0.src.tar.xz | tar --strip-components=1 -xvf - ;
+	if ! xz -cd cfe-7.0.0.src.tar.xz | "$TAR" --strip-components=1 -xvf - ;
 	then
 		echo "Failed to unpack Clang front end sources"
 		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
@@ -199,7 +210,7 @@ fi
 
 if [[ ! -f clang-tools-extra-7.0.0.src.unpacked ]];
 then
-	if ! xz -cd clang-tools-extra-7.0.0.src.tar.xz | tar --strip-components=1 -xvf - ;
+	if ! xz -cd clang-tools-extra-7.0.0.src.tar.xz | "$TAR" --strip-components=1 -xvf - ;
 	then
 		echo "Failed to unpack Clang Tools sources"
 		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
@@ -229,7 +240,7 @@ fi
 
 if [[ ! -f lld-7.0.0.src.unpacked ]];
 then
-	if ! xz -cd lld-7.0.0.src.tar.xz | tar --strip-components=1 -xvf - ;
+	if ! xz -cd lld-7.0.0.src.tar.xz | "$TAR" --strip-components=1 -xvf - ;
 	then
 		echo "Failed to unpack LLD Linker sources"
 		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
@@ -259,7 +270,7 @@ fi
 
 if [[ ! -f polly-7.0.0.src.unpacked ]];
 then
-	if ! xz -cd polly-7.0.0.src.tar.xz | tar --strip-components=1 -xvf - ;
+	if ! xz -cd polly-7.0.0.src.tar.xz | "$TAR" --strip-components=1 -xvf - ;
 	then
 		echo "Failed to unpack Polly Optimizer sources"
 		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
@@ -289,7 +300,7 @@ fi
 
 if [[ ! -f compiler-rt-7.0.0.src.unpacked ]];
 then
-	if ! xz -cd compiler-rt-7.0.0.src.tar.xz | tar --strip-components=1 -xvf - ;
+	if ! xz -cd compiler-rt-7.0.0.src.tar.xz | "$TAR" --strip-components=1 -xvf - ;
 	then
 		echo "Failed to unpack Compiler-RT sources"
 		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
@@ -321,7 +332,7 @@ fi
 
 if [[ ! -f libcxx-7.0.0.src.unpacked ]];
 then
-	if ! xz -cd libcxx-7.0.0.src.tar.xz | tar --strip-components=1 -xvf - ;
+	if ! xz -cd libcxx-7.0.0.src.tar.xz | "$TAR" --strip-components=1 -xvf - ;
 	then
 		echo "Failed to unpack libc++ sources"
 		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
@@ -368,7 +379,7 @@ fi
 
 if [[ ! -f libcxxabi-7.0.0.src.unpacked ]];
 then
-	if ! xz -cd libcxxabi-7.0.0.src.tar.xz | tar --strip-components=1 -xvf - ;
+	if ! xz -cd libcxxabi-7.0.0.src.tar.xz | "$TAR" --strip-components=1 -xvf - ;
 	then
 		echo "Failed to unpack libc++abi sources"
 		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
@@ -405,7 +416,7 @@ fi
 
 if [[ ! -f libunwind-7.0.0.src.unpacked ]];
 then
-	if ! xz -cd libunwind-7.0.0.src.tar.xz | tar --strip-components=1 -xvf - ;
+	if ! xz -cd libunwind-7.0.0.src.tar.xz | "$TAR" --strip-components=1 -xvf - ;
 	then
 		echo "Failed to unpack libunwind sources"
 		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
@@ -446,7 +457,7 @@ fi
 
 if [[ ! -f test-suite-7.0.0.src.unpacked ]];
 then
-	if ! xz -cd test-suite-7.0.0.src.tar.xz | tar --strip-components=1 -xvf - ;
+	if ! xz -cd test-suite-7.0.0.src.tar.xz | "$TAR" --strip-components=1 -xvf - ;
 	then
 		echo "Failed to unpack Test Suite sources"
 		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
