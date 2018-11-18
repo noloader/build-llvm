@@ -9,18 +9,23 @@
 #  - https://llvm.org/docs/GettingStarted.html
 #  - https://llvm.org/docs/CMake.html
 #  - https://releases.llvm.org/download.html
-#
+
+# The libcxx and libcxxabi recipes are currently broken. There's a
+# problem with a missing symbol called __thread_local_data(). We don't
+# know how to work around it, and our LLVM mailing list questions have
+# not been answered. Also see https://stackoverflow.com/q/53356172/608639.
+
 # If you find a LLVM provided script you should use it instead. We could not
 # find one so we are suffering the build process like hundreds of other
 # developers before us.
 
 # TODO
 #
+#  - fix libcxx and libcxxabi recipes
 #  - port to Solaris (tar and --strip-component)
 #  - investiagte RPATHs using ${ORIGIN}. Also see https://bit.ly/2RW4CGL
 #  - investiagte install_names on OS X
 #  - set LLVM_BUILD_TESTS="ON" eventually
-#
 
 ################################################################
 # Variables
@@ -289,6 +294,8 @@ fi
 # libc++
 ################################################################
 
+if false; then
+
 mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/projects/libcxx"
 cd "$BUILD_SCRIPT_SOURCE_DIR/projects/libcxx"
 
@@ -324,9 +331,13 @@ if [[ ! -f thread.patched ]]; then
 	touch thread.patched
 fi
 
+fi
+
 ################################################################
 # libc++abi
 ################################################################
+
+if false; then
 
 mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/projects/libcxxabi"
 cd "$BUILD_SCRIPT_SOURCE_DIR/projects/libcxxabi"
@@ -352,6 +363,8 @@ then
 		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
 	fi
 	touch libcxxabi-7.0.0.src.unpacked
+fi
+
 fi
 
 ################################################################
@@ -401,7 +414,7 @@ fi
 # - https://llvm.org/docs/TestingGuide.html
 # - https://llvm.org/docs/TestSuiteGuide.html
 
-# if false; then
+if false; then
 
 # https://llvm.org/docs/GettingStarted.html#checkout-llvm-from-subversion
 mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/projects/test-suite"
@@ -430,7 +443,7 @@ then
 	touch test-suite-7.0.0.src.unpacked
 fi
 
-# fi
+fi
 
 ################################################################
 # Build
