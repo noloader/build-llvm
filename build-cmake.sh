@@ -13,9 +13,21 @@
 # Default programs and locations. CMake requires GCC on AIX
 CC="${CC:-gcc}"
 CXX="${CXX:-g++}"
+MAKE="${MAKE:-make}"
+TAR="${TAR:-tar}"
 
 if [[ -z "$PREFIX" ]]; then
 	PREFIX="$HOME/cmake"
+fi
+
+# AIX and Solaris override
+if [[ "$MAKE" = "make" ]] && [[ -f "/usr/bin/gmake" ]]; then
+	MAKE=/usr/bin/gmake
+fi
+
+# AIX and Solaris override
+if [[ "$TAR" = "tar" ]] && [[ -f "/usr/linux/bin/tar" ]]; then
+	TAR=/usr/linux/bin/tar
 fi
 
 ################################################################
@@ -51,7 +63,7 @@ fi
 
 if [[ ! -f cmake-3.12.4.unpacked ]];
 then
-	if ! tar --strip-components=1 -xzf cmake-3.12.4.tar.gz;
+	if ! "$TAR" --strip-components=1 -xzf cmake-3.12.4.tar.gz;
 	then
 		echo "Failed to unpack CMake sources"
 		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
@@ -69,7 +81,7 @@ then
 	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
 fi
 
-if ! make VERBOSE=1;
+if ! "$MAKE" VERBOSE=1;
 then
 	echo "Failed to make CMake sources"
 	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
