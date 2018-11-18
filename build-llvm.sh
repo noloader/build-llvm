@@ -31,11 +31,11 @@
 # Variables
 ################################################################
 
-# CMake and Make location. Defaults to cmake program
+# CMake and Make location. Defaults to program on-path
 CMAKE="${CMAKE:-cmake}"
 MAKE="${MAKE:-make}"
 
-# libcxx and libcxxabi recipes are broken
+# libcxx and libcxxabi recipes are broken. Do they work anywhere?
 BUILD_SCRIPT_LIBCXX=false
 
 # Where to install the artifacts
@@ -76,9 +76,7 @@ case "$BUILD_SCRIPT_HOST" in
 		BUILD_SCRIPT_TARGET_ARCH="ARM" ;;
 	eabihf)
 		BUILD_SCRIPT_TARGET_ARCH="ARM" ;;
-	aarch32)
-		BUILD_SCRIPT_TARGET_ARCH="Aarch64" ;;
-	aarch64)
+	aarch*)
 		BUILD_SCRIPT_TARGET_ARCH="Aarch64" ;;
 	mips*)
 		BUILD_SCRIPT_TARGET_ARCH="Mips" ;;
@@ -297,7 +295,7 @@ fi
 # libc++
 ################################################################
 
-if test "$BUILD_SCRIPT_LIBCXX"; then
+if [[ "$BUILD_SCRIPT_LIBCXX" = "true" ]]; then
 
 mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/projects/libcxx"
 cd "$BUILD_SCRIPT_SOURCE_DIR/projects/libcxx"
@@ -344,7 +342,7 @@ fi
 # libc++abi
 ################################################################
 
-if test "$BUILD_SCRIPT_LIBCXX"; then
+if [[ "$BUILD_SCRIPT_LIBCXX" = "true" ]]; then
 
 mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/projects/libcxxabi"
 cd "$BUILD_SCRIPT_SOURCE_DIR/projects/libcxxabi"
@@ -465,6 +463,10 @@ CMAKE_ARGS+=(-DLLVM_PARALLEL_COMPILE_JOBS="$BUILD_SCRIPT_COMPILE_JOBS")
 CMAKE_ARGS+=(-DCMAKE_BUILD_TYPE="Release")
 CMAKE_ARGS+=(-DLLVM_INCLUDE_TOOLS="ON")
 CMAKE_ARGS+=(-DLLVM_BUILD_TESTS="OFF")
+
+if [[ "$BUILD_SCRIPT_LIBCXX" = "true" ]]; then
+	CMAKE_ARGS+=(-DLIBCXX_LIBCPPABI_VERSION="")
+fi
 
 # Add CC and CXX to CMake if provided in the environment.
 if [[ ! -z "$CC" ]]; then
