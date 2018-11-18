@@ -42,6 +42,10 @@ sudo make install
 
 You can also delete `BUILD_SCRIPT_SOURCE_DIR` and `BUILD_SCRIPT_BUILD_DIR` after installation.
 
+# libc++
+
+The libcxx and libcxxabi recipes are currently broken. There's a problem with a missing symbol called __thread_local_data(). We don't know how to work around it, and our LLVM mailing list questions have not been answered. Also see https://stackoverflow.com/q/53356172/608639.
+
 # Building CMake
 
 LLVM requires CMake 2.12 or higher. You can use `build-cmake.sh` to update CMake if needed. The script builds in the `cmake_build` directory and installs itself at `$HOME/cmake`. You can change the variables by editing the top of the script.

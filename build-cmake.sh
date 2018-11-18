@@ -30,8 +30,8 @@ trap finish EXIT
 # CMake sources
 ################################################################
 
-mkdir -p "cmake_build"
-cd "cmake_build"
+mkdir -p "$HOME/cmake_build"
+cd "$HOME/cmake_build"
 
 if [[ ! -f cmake-3.12.4.tar.gz ]];
 then
@@ -74,11 +74,11 @@ fi
 
 echo "*****************************************************************************"
 echo "It looks like the build and test succeeded. You next step are:"
-echo "  cd cmake_build"
+echo "  cd \"$HOME/cmake_build\""
 echo "  sudo make install"
 echo "Then, optionally:"
 echo "  cd .."
-echo "  rm -rf cmake_build"
+echo "  rm -rf \"$HOME/cmake_build\""
 echo "*****************************************************************************"
 
 [[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 0 || return 0
