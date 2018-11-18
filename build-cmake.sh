@@ -45,6 +45,10 @@ trap finish EXIT
 # CMake sources
 ################################################################
 
+if [[ -d "$HOME/cmake_build" ]]; then
+	rm -rf "$HOME/cmake_build"
+fi
+
 mkdir -p "$HOME/cmake_build"
 cd "$HOME/cmake_build"
 
