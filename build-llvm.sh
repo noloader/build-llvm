@@ -41,6 +41,11 @@ BUILD_SCRIPT_LIBCXX=false
 # Where to install the artifacts
 BUILD_SCRIPT_INSTALL_PREFIX="/opt/llvm"
 
+# Allow env override
+if [[ ! -z "$PREFIX" ]]; then
+	BUILD_SCRIPT_INSTALL_PREFIX="$PREFIX"
+fi
+
 # There must be an llvm/ in $BUILD_SCRIPT_SOURCE_DIR
 BUILD_SCRIPT_SOURCE_DIR="$HOME/llvm_source/llvm"
 BUILD_SCRIPT_BUILD_DIR="$HOME/llvm_build"
@@ -57,6 +62,7 @@ if [[ $(uname -s) = "AIX" ]]; then
 	BUILD_SCRIPT_HOST="aix";
 fi
 
+# These should be OK
 case "$BUILD_SCRIPT_HOST" in
 	i86pc)
 		BUILD_SCRIPT_TARGET_ARCH="X86" ;;
@@ -507,7 +513,7 @@ echo "It looks like the build and test succeeded. You next step are:"
 echo "  cd $BUILD_SCRIPT_BUILD_DIR"
 echo "  sudo make install"
 echo "Then, optionally:"
-echo "  cd .."
+echo "  cd ~"
 echo "  rm -rf \"$BUILD_SCRIPT_SOURCE_DIR\" \"$BUILD_SCRIPT_BUILD_DIR\""
 echo "*****************************************************************************"
 
