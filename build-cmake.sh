@@ -17,7 +17,7 @@ MAKE="${MAKE:-make}"
 TAR="${TAR:-tar}"
 
 if [[ -z "$PREFIX" ]]; then
-	PREFIX="$HOME/cmake"
+	PREFIX="/opt/cmake"
 fi
 
 # AIX and Solaris override
