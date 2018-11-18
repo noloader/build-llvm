@@ -13,7 +13,10 @@
 # Default programs and locations. CMake requires GCC on AIX
 CC="${CC:-gcc}"
 CXX="${CXX:-g++}"
-PREFIX="$HOME/cmake"
+
+if [[ -z "$PREFIX" ]]; then
+	PREFIX="$HOME/cmake"
+fi
 
 ################################################################
 # Exit
