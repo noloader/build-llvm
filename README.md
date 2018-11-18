@@ -48,4 +48,4 @@ The libcxx and libcxxabi recipes are currently broken. There's a problem with a 
 
 # Building CMake
 
-LLVM requires CMake 2.12 or higher. You can use `build-cmake.sh` to update CMake if needed. The script builds in the `cmake_build` directory and installs itself at `$HOME/cmake`. You can change the variables by editing the top of the script.
+LLVM requires CMake 3.4.3 or higher. You can use `build-cmake.sh` to update CMake if needed. The script builds in the `cmake_build` directory and installs itself at `$HOME/cmake`. You can change the variables by editing the top of the script.
