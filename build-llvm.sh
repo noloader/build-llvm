@@ -484,7 +484,7 @@ fi
 
 if [[ ! -f "$BUILD_SCRIPT_SOURCE_DIR/test/CodeGen/test_CodeGen_builtins-ppc-altivec.c" ]];
 then
-	echo "Patching builtins-ppc-altivec.c"
+	echo "Patching test_CodeGen_builtins-ppc-altivec.c"
 	cd "$BUILD_SCRIPT_SOURCE_DIR/test/CodeGen/"
 	
 	if wget "https://reviews.llvm.org/file/data/vzh7jxxovv6dkijjtx65/PHID-FILE-vclvlhuqaauv753flmvi/test_CodeGen_builtins-ppc-altivec.c" -O test_CodeGen_builtins-ppc-altivec.c;
@@ -495,7 +495,7 @@ fi
 
 if [[ ! -f "$BUILD_SCRIPT_SOURCE_DIR/test/CodeGen/test_CodeGen_builtins-ppc-vsx.c.patched" ]];
 then
-	echo "Patching altivec.h"
+	echo "Patching test_CodeGen_builtins-ppc-vsx.c"
 	cd "$BUILD_SCRIPT_SOURCE_DIR/test/CodeGen/"
 	
 	if wget "https://reviews.llvm.org/file/data/xdlnjqv4y6zc76r6kouh/PHID-FILE-5njcjgb57h6gncc6y5he/test_CodeGen_builtins-ppc-vsx.c" -O test_CodeGen_builtins-ppc-vsx.c;
