@@ -46,9 +46,14 @@ if [[ "$TAR" = "tar" ]] && [[ -f "/usr/linux/bin/tar" ]]; then
 	TAR=/usr/linux/bin/tar
 fi
 
-# libcxx and libcxxabi recipes are broken. Do they work anywhere?
-# Also see https://stackoverflow.com/q/53459921/608639 .
-BUILD_SCRIPT_LIBCXX=false
+# libcxx and libcxxabi recipes are broken. Also see
+# https://stackoverflow.com/q/53356172/608639 and
+# https://stackoverflow.com/q/53459921/608639
+BUILD_SCRIPT_LIBCXX="${BUILD_SCRIPT_LIBCXX:-false}"
+
+# Download and install the additional self tests. LLVM
+# has a minimal set of tests without the additional ones.
+BUILD_SCRIPT_TESTS="${BUILD_SCRIPT_TESTS:-false}"
 
 # Where to install the artifacts
 BUILD_SCRIPT_INSTALL_PREFIX="/opt/llvm"
@@ -74,9 +79,9 @@ if [[ $(uname -s) = "AIX" ]]; then
 	BUILD_SCRIPT_HOST="aix";
 fi
 
-# These should be OK
-LOWER_BUILD_SCRIPT_HOST=$(echo "$BUILD_SCRIPT_HOST" | tr '[:upper:]' '[:lower:]')
-case "$LOWER_BUILD_SCRIPT_HOST" in
+# These should be OK. "power" captures "Power Macintosh"
+LOWER_HOST=$(echo "$BUILD_SCRIPT_HOST" | tr '[:upper:]' '[:lower:]')
+case "$LOWER_HOST" in
 	i86pc)
 		BUILD_SCRIPT_TARGET_ARCH="X86" ;;
 	i.86)
@@ -91,7 +96,7 @@ case "$LOWER_BUILD_SCRIPT_HOST" in
 		BUILD_SCRIPT_TARGET_ARCH="PowerPC" ;;
 	ppc*)
 		BUILD_SCRIPT_TARGET_ARCH="PowerPC" ;;
-	"Power Macintosh")
+	power*)
 		BUILD_SCRIPT_TARGET_ARCH="PowerPC" ;;
 	arm*)
 		BUILD_SCRIPT_TARGET_ARCH="ARM" ;;
@@ -440,7 +445,7 @@ fi
 # - https://llvm.org/docs/TestingGuide.html
 # - https://llvm.org/docs/TestSuiteGuide.html
 
-if false; then
+if [[ "$BUILD_SCRIPT_TESTS" = "true" ]]; then
 
 # https://llvm.org/docs/GettingStarted.html#checkout-llvm-from-subversion
 mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/projects/test-suite"
@@ -475,6 +480,7 @@ fi
 # Patches from https://reviews.llvm.org/D54787
 ################################################################
 
+# Needed for PowerPC. Also see https://bugs.llvm.org/show_bug.cgi?id=39704
 if [[ ! -f "$BUILD_SCRIPT_SOURCE_DIR/tools/clang/lib/Headers/altivec.h.patched" ]];
 then
 	echo "Patching altivec.h"
@@ -485,6 +491,9 @@ then
 		touch "$BUILD_SCRIPT_SOURCE_DIR/tools/clang/lib/Headers/altivec.h.patched"
 	fi
 fi
+
+# Only fetch these if BUILD_SCRIPT_TESTS is ON
+if [[ "$BUILD_SCRIPT_TESTS" = "true" ]]; then
 
 if [[ ! -f "$BUILD_SCRIPT_SOURCE_DIR/test/CodeGen/test_CodeGen_builtins-ppc-altivec.c" ]];
 then
@@ -508,6 +517,9 @@ then
 	fi
 fi
 
+# BUILD_SCRIPT_TESTS
+fi
+
 ################################################################
 # Build
 ################################################################
@@ -520,11 +532,15 @@ CMAKE_ARGS+=(-DLLVM_TARGETS_TO_BUILD="$BUILD_SCRIPT_TARGET_ARCH")
 CMAKE_ARGS+=(-DLLVM_PARALLEL_COMPILE_JOBS="$BUILD_SCRIPT_COMPILE_JOBS")
 CMAKE_ARGS+=(-DCMAKE_BUILD_TYPE="Release")
 CMAKE_ARGS+=(-DLLVM_INCLUDE_TOOLS="ON")
-CMAKE_ARGS+=(-DLLVM_BUILD_TESTS="OFF")
-
 
 if [[ "$BUILD_SCRIPT_LIBCXX" = "true" ]]; then
 	CMAKE_ARGS+=(-DLIBCXX_LIBCPPABI_VERSION="")
+fi
+
+if [[ "$BUILD_SCRIPT_TESTS" = "true" ]]; then
+	CMAKE_ARGS+=(-DLLVM_BUILD_TESTS="ON")
+else
+	CMAKE_ARGS+=(-DLLVM_BUILD_TESTS="OFF")
 fi
 
 # Add CC and CXX to CMake if provided in the environment.
