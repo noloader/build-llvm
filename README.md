@@ -1,6 +1,6 @@
 # Build LLVM
 
-Recipes to download and build LLVM, Compiler front end and Compiler-RT from sources. The script builds the latest LLVM from release tarballs, which is version 7.0. The script also patches the LLVM 7.0 sources for PowerPC Issue D54787, [Vector load/store builtins overstate alignment of pointers](https://reviews.llvm.org/D54787).
+Recipes to download and build LLVM, Compiler front end and Compiler-RT from sources. The script builds the latest LLVM from release tarballs, which is version 7.0. The script also patches the LLVM 7.0 sources for PowerPC Issue 39704, [Vector load/store builtins overstate alignment of pointers](https://bugs.llvm.org/show_bug.cgi?id=39704) (see [Review D54787](https://reviews.llvm.org/D54787)).
 
 Testing on Fedora x86_64 reveals no `LD_LIBRARY_PATH` is needed to run an executable. LLVM fails to build on a old Apple PowerMac G5.
 
