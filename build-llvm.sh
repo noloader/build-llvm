@@ -47,6 +47,7 @@ if [[ "$TAR" = "tar" ]] && [[ -f "/usr/linux/bin/tar" ]]; then
 fi
 
 # libcxx and libcxxabi recipes are broken. Do they work anywhere?
+# Also see https://stackoverflow.com/q/53459921/608639 .
 BUILD_SCRIPT_LIBCXX=false
 
 # Where to install the artifacts
@@ -74,14 +75,17 @@ if [[ $(uname -s) = "AIX" ]]; then
 fi
 
 # These should be OK
-case "$BUILD_SCRIPT_HOST" in
+LOWER_BUILD_SCRIPT_HOST=$(echo "$BUILD_SCRIPT_HOST" | tr '[:upper:]' '[:lower:]')
+case "$LOWER_BUILD_SCRIPT_HOST" in
 	i86pc)
 		BUILD_SCRIPT_TARGET_ARCH="X86" ;;
 	i.86)
 		BUILD_SCRIPT_TARGET_ARCH="X86" ;;
 	x86_64)
+		BUILD_SCRIPT_LIBCXX="true"
 		BUILD_SCRIPT_TARGET_ARCH="X86" ;;
 	amd64)
+		BUILD_SCRIPT_LIBCXX="true"
 		BUILD_SCRIPT_TARGET_ARCH="X86" ;;
 	aix)
 		BUILD_SCRIPT_TARGET_ARCH="PowerPC" ;;
@@ -102,7 +106,7 @@ case "$BUILD_SCRIPT_HOST" in
 	sparc*)
 		BUILD_SCRIPT_TARGET_ARCH="Sparc" ;;
 	*)
-		echo "Unknown architecture"
+		echo "Unknown host platform $BUILD_SCRIPT_HOST"
 		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
 esac
 
@@ -517,6 +521,7 @@ CMAKE_ARGS+=(-DLLVM_PARALLEL_COMPILE_JOBS="$BUILD_SCRIPT_COMPILE_JOBS")
 CMAKE_ARGS+=(-DCMAKE_BUILD_TYPE="Release")
 CMAKE_ARGS+=(-DLLVM_INCLUDE_TOOLS="ON")
 CMAKE_ARGS+=(-DLLVM_BUILD_TESTS="OFF")
+
 
 if [[ "$BUILD_SCRIPT_LIBCXX" = "true" ]]; then
 	CMAKE_ARGS+=(-DLIBCXX_LIBCPPABI_VERSION="")
