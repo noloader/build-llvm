@@ -49,19 +49,27 @@ fi
 # libcxx and libcxxabi recipes are broken. Also see
 # https://stackoverflow.com/q/53356172/608639 and
 # https://stackoverflow.com/q/53459921/608639
-BUILD_SCRIPT_LIBCXX="${BUILD_SCRIPT_LIBCXX:-false}"
+if [[ ! -z "$BUILD_SCRIPT_LIBCXX" ]]; then
+	BUILD_SCRIPT_LIBCXX="false"
+fi
 
 # Download and install the additional self tests. LLVM
 # has a minimal set of tests without the additional ones.
-BUILD_SCRIPT_TESTS="${BUILD_SCRIPT_TESTS:-false}"
+if [[ ! -z "$BUILD_SCRIPT_TESTS" ]]; then
+	BUILD_SCRIPT_TESTS="false"
+fi
 
 # Concurrent make jobs
-BUILD_SCRIPT_COMPILE_JOBS="${BUILD_SCRIPT_TESTS:-4}"
+if [[ ! -z "$BUILD_SCRIPT_COMPILE_JOBS" ]]; then
+	BUILD_SCRIPT_COMPILE_JOBS="4"
+fi
 
 # Where to install the artifacts
-BUILD_SCRIPT_INSTALL_PREFIX="/opt/llvm"
+if [[ ! -z "$BUILD_SCRIPT_INSTALL_PREFIX" ]]; then
+	BUILD_SCRIPT_INSTALL_PREFIX="/opt/llvm"
+fi
 
-# Allow env override
+# Easier override
 if [[ ! -z "$PREFIX" ]]; then
 	BUILD_SCRIPT_INSTALL_PREFIX="$PREFIX"
 fi
@@ -433,6 +441,7 @@ then
 	touch libunwind-7.0.0.src.unpacked
 fi
 
+# Don't build
 fi
 
 ################################################################
@@ -474,6 +483,7 @@ then
 	touch test-suite-7.0.0.src.unpacked
 fi
 
+# BUILD_SCRIPT_TESTS
 fi
 
 ################################################################

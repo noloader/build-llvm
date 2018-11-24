@@ -34,10 +34,10 @@ CMAKE=/opt/local/bin/cmake ./build-llvm.sh
 And more options:
 
 ```
-    CMAKE=$HOME/cmake/bin/cmake \
-    BUILD_SCRIPT_LIBCXX=true \
-    BUILD_SCRIPT_TESTS=true \
-    BUILD_SCRIPT_COMPILE_JOBS=8 \
+    CMAKE="$HOME/cmake/bin/cmake" \
+    BUILD_SCRIPT_LIBCXX="true" \
+    BUILD_SCRIPT_TESTS="true" \
+    BUILD_SCRIPT_COMPILE_JOBS="8" \
     PREFIX="$HOME/llvm"
 ./build-llvm.sh
 ```
