@@ -498,6 +498,8 @@ fi
 ################################################################
 
 # Needed for PowerPC. Also see https://bugs.llvm.org/show_bug.cgi?id=39704
+if [[ "$BUILD_SCRIPT_TARGET_ARCH" = "PowerPC" ]]; then
+
 if [[ ! -f "$BUILD_SCRIPT_SOURCE_DIR/tools/clang/lib/Headers/altivec.h.patched" ]];
 then
 	echo "Patching altivec.h"
@@ -535,6 +537,9 @@ then
 fi
 
 # BUILD_SCRIPT_TESTS
+fi
+
+# BUILD_SCRIPT_TARGET_ARCH=PowerPC
 fi
 
 ################################################################
