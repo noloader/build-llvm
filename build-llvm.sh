@@ -55,6 +55,9 @@ BUILD_SCRIPT_LIBCXX="${BUILD_SCRIPT_LIBCXX:-false}"
 # has a minimal set of tests without the additional ones.
 BUILD_SCRIPT_TESTS="${BUILD_SCRIPT_TESTS:-false}"
 
+# Concurrent make jobs
+BUILD_SCRIPT_COMPILE_JOBS="${BUILD_SCRIPT_TESTS:-4}"
+
 # Where to install the artifacts
 BUILD_SCRIPT_INSTALL_PREFIX="/opt/llvm"
 
@@ -66,9 +69,6 @@ fi
 # There must be an llvm/ in $BUILD_SCRIPT_SOURCE_DIR
 BUILD_SCRIPT_SOURCE_DIR="$HOME/llvm_source/llvm"
 BUILD_SCRIPT_BUILD_DIR="$HOME/llvm_build"
-
-# Concurrent make jobs
-BUILD_SCRIPT_COMPILE_JOBS="4"
 
 # LLVM_VERSION="7.0.0"
 BUILD_SCRIPT_TARGET_ARCH="Unknown"
