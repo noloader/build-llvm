@@ -35,10 +35,10 @@ And more options:
 
 ```
     CMAKE="$HOME/cmake/bin/cmake" \
+    PREFIX="$HOME/llvm" \
     BUILD_SCRIPT_LIBCXX="true" \
     BUILD_SCRIPT_TESTS="true" \
     BUILD_SCRIPT_COMPILE_JOBS="8" \
-    PREFIX="$HOME/llvm"
 ./build-llvm.sh
 ```
 
