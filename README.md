@@ -16,7 +16,7 @@ There are several variables of interest you can tune for the build:
 
 # Building the sources
 
-`./build-llvm.sh` is all that is required to download and build the LLVM sources. You will have to manually install it.
+`./build-llvm.sh` is all that is required to download and build the LLVM sources. You will have to manually install Clang after you build it.
 
 LLVM requires GCC 4.8 or above to compile the source code. The script honors alternate compilers, and you can pass them to CMake using:
 
@@ -31,6 +31,17 @@ And if you need an alternate CMake to satisfy LLVM requirements:
 CMAKE=/opt/local/bin/cmake ./build-llvm.sh
 ```
 
+And more options:
+
+```
+    CMAKE=$HOME/cmake/bin/cmake \
+    BUILD_SCRIPT_LIBCXX=true \
+    BUILD_SCRIPT_TESTS=true \
+    BUILD_SCRIPT_COMPILE_JOBS=8 \
+    PREFIX="$HOME/llvm"
+./build-llvm.sh
+```
+
 # Installing the toolchain
 
 You have to manually install the toolchain after building it, if desired. Perform the following steps to install the toolchain:
@@ -40,7 +51,7 @@ cd llvm_build
 sudo make install
 ```
 
-You can also delete `BUILD_SCRIPT_SOURCE_DIR` and `BUILD_SCRIPT_BUILD_DIR` after installation.
+You can also delete `BUILD_SCRIPT_SOURCE_DIR` and `BUILD_SCRIPT_BUILD_DIR` after installation. The defaults for `BUILD_SCRIPT_SOURCE_DIR` and `BUILD_SCRIPT_BUILD_DIR` and `~/llvm_build` and `~/llvm_source`.
 
 # libc++
 
