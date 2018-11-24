@@ -37,35 +37,37 @@ MAKE="${MAKE:-make}"
 TAR="${TAR:-tar}"
 
 # AIX and Solaris override
-if [[ "$MAKE" = "make" ]] && [[ -f "/usr/bin/gmake" ]]; then
-	MAKE=/usr/bin/gmake
+if [[ "$MAKE" = "make" ]] && [[ $(command -v gmake) ]]; then
+	MAKE=$(command -v gmake)
 fi
 
 # AIX and Solaris override
 if [[ "$TAR" = "tar" ]] && [[ -f "/usr/linux/bin/tar" ]]; then
 	TAR=/usr/linux/bin/tar
+elif [[ "$TAR" = "tar" ]] && [[ -f "/usr/gnu/bin/tar" ]]; then
+	TAR=/usr/gnu/bin/tar
 fi
 
 # libcxx and libcxxabi recipes are broken. Also see
 # https://stackoverflow.com/q/53356172/608639 and
 # https://stackoverflow.com/q/53459921/608639
-if [[ ! -z "$BUILD_SCRIPT_LIBCXX" ]]; then
+if [[ -z "$BUILD_SCRIPT_LIBCXX" ]]; then
 	BUILD_SCRIPT_LIBCXX="false"
 fi
 
 # Download and install the additional self tests. LLVM
 # has a minimal set of tests without the additional ones.
-if [[ ! -z "$BUILD_SCRIPT_TESTS" ]]; then
+if [[ -z "$BUILD_SCRIPT_TESTS" ]]; then
 	BUILD_SCRIPT_TESTS="false"
 fi
 
 # Concurrent make jobs
-if [[ ! -z "$BUILD_SCRIPT_COMPILE_JOBS" ]]; then
+if [[ -z "$BUILD_SCRIPT_COMPILE_JOBS" ]]; then
 	BUILD_SCRIPT_COMPILE_JOBS="4"
 fi
 
 # Where to install the artifacts
-if [[ ! -z "$BUILD_SCRIPT_INSTALL_PREFIX" ]]; then
+if [[ -z "$BUILD_SCRIPT_INSTALL_PREFIX" ]]; then
 	BUILD_SCRIPT_INSTALL_PREFIX="/opt/llvm"
 fi
 
@@ -74,9 +76,13 @@ if [[ ! -z "$PREFIX" ]]; then
 	BUILD_SCRIPT_INSTALL_PREFIX="$PREFIX"
 fi
 
-# There must be an llvm/ in $BUILD_SCRIPT_SOURCE_DIR
-BUILD_SCRIPT_SOURCE_DIR="$HOME/llvm_source/llvm"
-BUILD_SCRIPT_BUILD_DIR="$HOME/llvm_build"
+# The tail of $BUILD_SCRIPT_SOURCE_DIR must be llvm
+if [[ -z "$BUILD_SCRIPT_SOURCE_DIR" ]]; then
+	BUILD_SCRIPT_SOURCE_DIR="$HOME/llvm_source/llvm"
+fi
+if [[ -z "$BUILD_SCRIPT_BUILD_DIR" ]]; then
+	BUILD_SCRIPT_BUILD_DIR="$HOME/llvm_build"
+fi
 
 # LLVM_VERSION="7.0.0"
 BUILD_SCRIPT_TARGET_ARCH="Unknown"
@@ -87,7 +93,8 @@ if [[ $(uname -s) = "AIX" ]]; then
 	BUILD_SCRIPT_HOST="aix";
 fi
 
-# These should be OK. "power" captures "Power Macintosh"
+# These should be OK. "power" captures "Power Macintosh".
+# libcxx and libcxxabi only seems to work on X86 Linux.
 LOWER_HOST=$(echo "$BUILD_SCRIPT_HOST" | tr '[:upper:]' '[:lower:]')
 case "$LOWER_HOST" in
 	i86pc)
