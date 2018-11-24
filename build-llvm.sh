@@ -482,36 +482,25 @@ then
 	fi
 fi
 
-if [[ ! -f "$BUILD_SCRIPT_SOURCE_DIR/tools/clang/lib/Headers/altivec.h.patched" ]];
-then
-	echo "Patching test_CodeGen_builtins-ppc-altivec.c"
-	cd "$BUILD_SCRIPT_SOURCE_DIR/tools/clang/lib/Headers/"
-	
-	if wget "https://reviews.llvm.org/file/data/vzh7jxxovv6dkijjtx65/PHID-FILE-vclvlhuqaauv753flmvi/test_CodeGen_builtins-ppc-altivec.c" -O altivec.h;
-	then	
-		touch "$BUILD_SCRIPT_SOURCE_DIR/tools/clang/lib/Headers/altivec.h.patched"
-	fi
-fi
-
-if [[ ! -f "$BUILD_SCRIPT_SOURCE_DIR/test/CodeGen/builtins-ppc-altivec.c.patched" ]];
+if [[ ! -f "$BUILD_SCRIPT_SOURCE_DIR/test/CodeGen/test_CodeGen_builtins-ppc-altivec.c" ]];
 then
 	echo "Patching builtins-ppc-altivec.c"
 	cd "$BUILD_SCRIPT_SOURCE_DIR/test/CodeGen/"
 	
-	if wget "https://reviews.llvm.org/file/data/spoz35f5r23opk3e4tfr/PHID-FILE-dimcd55rfeplgfxowli3/lib_Headers_altivec.h" -O builtins-ppc-altivec.c;
+	if wget "https://reviews.llvm.org/file/data/vzh7jxxovv6dkijjtx65/PHID-FILE-vclvlhuqaauv753flmvi/test_CodeGen_builtins-ppc-altivec.c" -O test_CodeGen_builtins-ppc-altivec.c;
 	then	
-		touch "$BUILD_SCRIPT_SOURCE_DIR/test/CodeGen/builtins-ppc-altivec.c.patched"
+		touch "$BUILD_SCRIPT_SOURCE_DIR/test/CodeGen/test_CodeGen_builtins-ppc-altivec.c"
 	fi
 fi
 
-if [[ ! -f "$BUILD_SCRIPT_SOURCE_DIR/test/CodeGen/builtins-ppc-vsx.c.patched" ]];
+if [[ ! -f "$BUILD_SCRIPT_SOURCE_DIR/test/CodeGen/test_CodeGen_builtins-ppc-vsx.c.patched" ]];
 then
 	echo "Patching altivec.h"
 	cd "$BUILD_SCRIPT_SOURCE_DIR/test/CodeGen/"
 	
-	if wget "https://reviews.llvm.org/file/data/xdlnjqv4y6zc76r6kouh/PHID-FILE-5njcjgb57h6gncc6y5he/test_CodeGen_builtins-ppc-vsx.c" -O builtins-ppc-vsx.c;
+	if wget "https://reviews.llvm.org/file/data/xdlnjqv4y6zc76r6kouh/PHID-FILE-5njcjgb57h6gncc6y5he/test_CodeGen_builtins-ppc-vsx.c" -O test_CodeGen_builtins-ppc-vsx.c;
 	then	
-		touch "$BUILD_SCRIPT_SOURCE_DIR/test/CodeGen/builtins-ppc-vsx.c.patched"
+		touch "$BUILD_SCRIPT_SOURCE_DIR/test/CodeGen/test_CodeGen_builtins-ppc-vsx.c.patched"
 	fi
 fi
 
