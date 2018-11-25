@@ -49,6 +49,11 @@ elif [[ "$TAR" = "tar" ]] && [[ -f "/usr/gnu/bin/tar" ]]; then
 	TAR=/usr/gnu/bin/tar
 fi
 
+# Compiler-RT is a no-go on Solaris
+if [[ -z "$BUILD_SCRIPT_TOOLS" ]]; then
+	BUILD_SCRIPT_TOOLS="ON"
+fi
+
 # libcxx and libcxxabi recipes are mostly broken. Also see
 # https://stackoverflow.com/q/53356172/608639 and
 # https://stackoverflow.com/q/53459921/608639
@@ -99,8 +104,13 @@ fi
 LOWER_HOST=$(echo "$BUILD_SCRIPT_HOST" | tr '[:upper:]' '[:lower:]')
 case "$LOWER_HOST" in
 	i86pc)
+		echo "Setting BUILD_SCRIPT_TOOLS=OFF BUILD_SCRIPT_LIBCXX=OFF for X86"
+		BUILD_SCRIPT_TOOLS="OFF"
+		BUILD_SCRIPT_LIBCXX="OFF"
 		BUILD_SCRIPT_TARGET_ARCH="X86" ;;
 	i.86)
+		echo "Setting BUILD_SCRIPT_LIBCXX=ON for X86"
+		BUILD_SCRIPT_LIBCXX="ON"
 		BUILD_SCRIPT_TARGET_ARCH="X86" ;;
 	x86_64)
 		echo "Setting BUILD_SCRIPT_LIBCXX=ON for X86"
@@ -327,6 +337,8 @@ fi
 # Compiler-RT
 ################################################################
 
+if [[ "$BUILD_SCRIPT_TOOLS" = "ON" ]]; then
+
 mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/llvm/projects/compiler-rt"
 if ! cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/projects/compiler-rt"; then
 	echo "Failed to enter directory"
@@ -354,6 +366,9 @@ then
 		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
 	fi
 	touch compiler-rt-7.0.0.src.unpacked
+fi
+
+# BUILD_SCRIPT_TOOLS
 fi
 
 ################################################################
