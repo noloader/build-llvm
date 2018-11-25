@@ -20,6 +20,10 @@ if [[ -z "$PREFIX" ]]; then
 	PREFIX="/opt/cmake"
 fi
 
+if [[ -z "$JOBS" ]]; then
+	JOBS="2"
+fi
+
 # AIX and Solaris override
 if [[ "$MAKE" = "make" ]] && [[ $(command -v gmake) ]]; then
 	MAKE=$(command -v gmake)
@@ -98,7 +102,7 @@ then
 	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
 fi
 
-if ! "$MAKE" VERBOSE=1;
+if ! "$MAKE" -j "$JOBS" VERBOSE=1;
 then
 	echo "Failed to make CMake sources"
 	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
