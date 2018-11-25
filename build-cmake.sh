@@ -21,13 +21,15 @@ if [[ -z "$PREFIX" ]]; then
 fi
 
 # AIX and Solaris override
-if [[ "$MAKE" = "make" ]] && [[ -f "/usr/bin/gmake" ]]; then
-	MAKE=/usr/bin/gmake
+if [[ "$MAKE" = "make" ]] && [[ $(command -v gmake) ]]; then
+	MAKE=$(command -v gmake)
 fi
 
 # AIX and Solaris override
 if [[ "$TAR" = "tar" ]] && [[ -f "/usr/linux/bin/tar" ]]; then
 	TAR=/usr/linux/bin/tar
+elif [[ "$TAR" = "tar" ]] && [[ -f "/usr/gnu/bin/tar" ]]; then
+	TAR=/usr/gnu/bin/tar
 fi
 
 ################################################################
@@ -50,7 +52,10 @@ if [[ -d "$HOME/cmake_build" ]]; then
 fi
 
 mkdir -p "$HOME/cmake_build"
-cd "$HOME/cmake_build"
+if ! cd "$HOME/cmake_build"; then
+	echo "Failed to enter $HOME/cmake_build"
+	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+fi
 
 if [[ ! -f cmake-3.12.4.tar.gz ]];
 then

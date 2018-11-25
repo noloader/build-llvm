@@ -163,7 +163,10 @@ mkdir -p "$BUILD_SCRIPT_BUILD_DIR"
 ################################################################
 
 mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/llvm"
-cd "$BUILD_SCRIPT_SOURCE_DIR/llvm"
+if ! cd "$BUILD_SCRIPT_SOURCE_DIR/llvm"; then
+	echo "Failed to enter $BUILD_SCRIPT_SOURCE_DIR/llvm"
+	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+fi
 
 if [[ ! -f llvm-7.0.0.src.tar.xz ]];
 then
@@ -193,7 +196,10 @@ fi
 ################################################################
 
 mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/llvm/tools/clang"
-cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/tools/clang"
+if ! cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/tools/clang"; then
+	echo "Failed to enter directory"
+	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+fi
 
 if [[ ! -f cfe-7.0.0.src.tar.xz ]];
 then
@@ -223,7 +229,10 @@ fi
 ################################################################
 
 mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/llvm/tools/clang/tools/extra"
-cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/tools/clang/tools/extra"
+if ! cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/tools/clang/tools/extra"; then
+	echo "Failed to enter directory"
+	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+fi
 
 if [[ ! -f clang-tools-extra-7.0.0.src.tar.xz ]];
 then
@@ -253,7 +262,10 @@ fi
 ################################################################
 
 mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/llvm/tools/lld"
-cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/tools/lld"
+if ! cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/tools/lld"; then
+	echo "Failed to enter directory"
+	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+fi
 
 if [[ ! -f lld-7.0.0.src.tar.xz ]];
 then
@@ -283,7 +295,10 @@ fi
 ################################################################
 
 mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/llvm/tools/polly"
-cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/tools/polly"
+if ! cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/tools/polly"; then
+	echo "Failed to enter directory"
+	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+fi
 
 if [[ ! -f polly-7.0.0.src.tar.xz ]];
 then
@@ -313,7 +328,10 @@ fi
 ################################################################
 
 mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/llvm/projects/compiler-rt"
-cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/projects/compiler-rt"
+if ! cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/projects/compiler-rt"; then
+	echo "Failed to enter directory"
+	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+fi
 
 if [[ ! -f compiler-rt-7.0.0.src.tar.xz ]];
 then
@@ -345,7 +363,10 @@ fi
 if [[ "$BUILD_SCRIPT_LIBCXX" = "ON" ]]; then
 
 mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/llvm/projects/libcxx"
-cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/projects/libcxx"
+if ! cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/projects/libcxx"; then
+	echo "Failed to enter directory"
+	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+fi
 
 if [[ ! -f libcxx-7.0.0.src.tar.xz ]];
 then
@@ -380,7 +401,10 @@ fi
 if [[ "$BUILD_SCRIPT_LIBCXX" = "ON" ]]; then
 
 mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/llvm/projects/libcxxabi"
-cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/projects/libcxxabi"
+if ! cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/projects/libcxxabi"; then
+	echo "Failed to enter directory"
+	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+fi
 
 if [[ ! -f libcxxabi-7.0.0.src.tar.xz ]];
 then
@@ -418,7 +442,10 @@ fi
 if false; then
 
 mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/llvm/projects/libunwind"
-cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/projects/libunwind"
+if ! cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/projects/libunwind"; then
+	echo "Failed to enter directory"
+	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+fi
 
 if [[ ! -f libunwind-7.0.0.src.tar.xz ]];
 then
@@ -457,7 +484,10 @@ if [[ "$BUILD_SCRIPT_TESTS" = "ON" ]]; then
 
 # https://llvm.org/docs/GettingStarted.html#checkout-llvm-from-subversion
 mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/llvm/projects/test-suite"
-cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/projects/test-suite"
+if ! cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/projects/test-suite"; then
+	echo "Failed to enter directory"
+	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+fi
 
 if [[ ! -f test-suite-7.0.0.src.tar.xz ]];
 then
@@ -496,7 +526,10 @@ then
 	if [[ ! -f "$BUILD_SCRIPT_SOURCE_DIR/llvm/projects/libcxx/thread.patched" ]];
 	then
 		echo "Patching libcxx/include/thread"
-		cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/projects/libcxx"
+		if ! cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/projects/libcxx"; then
+			echo "Failed to enter directory"
+			[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+		fi
 
 		THIS_FILE=include/thread
 		sed -i "s/_LIBCPP_CONSTEXPR duration<long double> _Max/const duration<long double> _Max/g" "$THIS_FILE" > "$THIS_FILE.patched"
@@ -517,12 +550,16 @@ if [[ "$BUILD_SCRIPT_TARGET_ARCH" = "PowerPC" ]]; then
 if [[ ! -f "$BUILD_SCRIPT_SOURCE_DIR/llvm/tools/clang/lib/Headers/altivec.h.patched" ]];
 then
 	echo "Patching altivec.h"
-	cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/tools/clang/lib/Headers/"
-	
+
+	if ! cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/tools/clang/lib/Headers/"; then
+		echo "Failed to enter directory"
+		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+	fi
+
 	URL='https://reviews.llvm.org/file/data/pqvafnefzlkhyubairgc/PHID-FILE-t22yd7z53iacq5375jrt/lib_Headers_altivec.h'
 
 	if wget "$URL" -O altivec.h;
-	then	
+	then
 		touch "altivec.h.patched"
 	else
 		echo "Attempting to download altivec.h over insecure channel"
@@ -544,12 +581,16 @@ if [[ "$BUILD_SCRIPT_TESTS" = "ON" ]]; then
 if [[ ! -f "$BUILD_SCRIPT_SOURCE_DIR/llvm/test/CodeGen/test_CodeGen_builtins-ppc-altivec.c.patched" ]];
 then
 	echo "Patching test_CodeGen_builtins-ppc-altivec.c"
-	cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/test/CodeGen/"
+
+	if ! cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/test/CodeGen/"; then
+		echo "Failed to enter directory"
+		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+	fi
 
 	URL='https://reviews.llvm.org/file/data/vzh7jxxovv6dkijjtx65/PHID-FILE-vclvlhuqaauv753flmvi/test_CodeGen_builtins-ppc-altivec.c'
 
 	if wget "$URL" -O test_CodeGen_builtins-ppc-altivec.c;
-	then	
+	then
 		touch "test_CodeGen_builtins-ppc-altivec.c.patched"
 	else
 		echo "Attempting to download test_CodeGen_builtins-ppc-altivec.c over insecure channel"
@@ -565,12 +606,16 @@ fi
 if [[ ! -f "$BUILD_SCRIPT_SOURCE_DIR/llvm/test/CodeGen/test_CodeGen_builtins-ppc-vsx.c.patched" ]];
 then
 	echo "Patching test_CodeGen_builtins-ppc-vsx.c"
-	cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/test/CodeGen/"
+
+	if ! cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/test/CodeGen/"; then
+		echo "Failed to enter directory"
+		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+	fi
 
 	URL='https://reviews.llvm.org/file/data/xdlnjqv4y6zc76r6kouh/PHID-FILE-5njcjgb57h6gncc6y5he/test_CodeGen_builtins-ppc-vsx.c'
 
 	if wget "$URL" -O test_CodeGen_builtins-ppc-vsx.c;
-	then	
+	then
 		touch "test_CodeGen_builtins-ppc-vsx.c.patched"
 	else
 		echo "Attempting to download test_CodeGen_builtins-ppc-vsx.c over insecure channel"
@@ -595,7 +640,10 @@ fi
 # Build
 ################################################################
 
-cd "$BUILD_SCRIPT_BUILD_DIR"
+if ! cd "$BUILD_SCRIPT_BUILD_DIR"; then
+	echo "Failed to enter $BUILD_SCRIPT_BUILD_DIR"
+	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+fi
 
 CMAKE_ARGS=()
 CMAKE_ARGS+=("-DCMAKE_INSTALL_PREFIX=$BUILD_SCRIPT_INSTALL_PREFIX")
