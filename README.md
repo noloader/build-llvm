@@ -13,6 +13,8 @@ There are several variables of interest you can tune for the build:
 * `BUILD_SCRIPT_SOURCE_DIR` - scratch directory to download an unpack the sources. The default value is `$HOME/llvm_source/llvm`. The tail must include `llvm/`.
 * `BUILD_SCRIPT_BUILD_DIR` - scratch directory to build the the sources. Output artifacts are in this directory. The default value is `$HOME/llvm_build`.
 * `BUILD_SCRIPT_MAKE_JOBS` - the number of concurrent make jobs. The default value is `4`.
+* `BUILD_SCRIPT_LIBCXX` - controls libcxx and libcxxabi. The default value is `OFF` because building libc++ mostly does not work.
+* `BUILD_SCRIPT_TESTS` - controls the Test Suite. The self tests are always run, but the Test Suite is a different download. The default value is `OFF`
 
 # Building the sources
 
@@ -44,20 +46,21 @@ And more options:
 
 # Installing the toolchain
 
-You have to manually install the toolchain after building it, if desired. Perform the following steps to install the toolchain:
+You have to manually install the LLVM toolchain after building it, if desired. Perform the following steps to install the toolchain:
 
 ```
-cd llvm_build
+# Defaults to $HOME/llvm_build
+cd "$BUILD_SCRIPT_BUILD_DIR"
 sudo make install
 ```
 
-You can also delete `BUILD_SCRIPT_SOURCE_DIR` and `BUILD_SCRIPT_BUILD_DIR` after installation. The defaults for `BUILD_SCRIPT_SOURCE_DIR` and `BUILD_SCRIPT_BUILD_DIR` and `~/llvm_build` and `~/llvm_source`.
+You can also delete `BUILD_SCRIPT_SOURCE_DIR` and `BUILD_SCRIPT_BUILD_DIR` after installation. The defaults for `BUILD_SCRIPT_SOURCE_DIR` and `BUILD_SCRIPT_BUILD_DIR` and `$HOME/llvm_build` and `$HOME/llvm_source`, respectively.
 
 # libc++
 
 The libcxx and libcxxabi recipes are mostly broken. There's a problem with a missing symbol called `__thread_local_data()`. We don't know how to work around it, and our LLVM mailing list questions have not been answered. Also see https://stackoverflow.com/q/53356172/608639 and https://stackoverflow.com/q/53459921/608639.
 
-If you want to attempt to build libcxx and libcxxabi then set `BUILD_SCRIPT_LIBCXX=ON`.
+If you want to attempt to build libcxx and libcxxabi then set `BUILD_SCRIPT_LIBCXX=ON`. On PowerPC we unconditionally set `BUILD_SCRIPT_LIBCXX=OFF` because we know it breaks us.
 
 # Building CMake
 

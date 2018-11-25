@@ -50,7 +50,7 @@ elif [[ "$TAR" = "tar" ]] && [[ -f "/usr/gnu/bin/tar" ]]; then
 	TAR=/usr/gnu/bin/tar
 fi
 
-# libcxx and libcxxabi recipes are broken. Also see
+# libcxx and libcxxabi recipes are mostly broken. Also see
 # https://stackoverflow.com/q/53356172/608639 and
 # https://stackoverflow.com/q/53459921/608639
 if [[ -z "$BUILD_SCRIPT_LIBCXX" ]]; then
@@ -78,9 +78,9 @@ if [[ ! -z "$PREFIX" ]]; then
 	BUILD_SCRIPT_INSTALL_PREFIX="$PREFIX"
 fi
 
-# The tail of $BUILD_SCRIPT_SOURCE_DIR must be llvm
+# DO NOT include llvm/ in $BUILD_SCRIPT_SOURCE_DIR
 if [[ -z "$BUILD_SCRIPT_SOURCE_DIR" ]]; then
-	BUILD_SCRIPT_SOURCE_DIR="$HOME/llvm_source/llvm"
+	BUILD_SCRIPT_SOURCE_DIR="$HOME/llvm_source"
 fi
 if [[ -z "$BUILD_SCRIPT_BUILD_DIR" ]]; then
 	BUILD_SCRIPT_BUILD_DIR="$HOME/llvm_build"
@@ -156,15 +156,15 @@ if [[ -d "$BUILD_SCRIPT_BUILD_DIR" ]]; then
 	rm -rf "$BUILD_SCRIPT_BUILD_DIR"
 fi
 
-mkdir -p "$BUILD_SCRIPT_SOURCE_DIR"
+mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/llvm"
 mkdir -p "$BUILD_SCRIPT_BUILD_DIR"
 
 ################################################################
 # LLVM base
 ################################################################
 
-mkdir -p "$BUILD_SCRIPT_SOURCE_DIR"
-cd "$BUILD_SCRIPT_SOURCE_DIR"
+mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/llvm"
+cd "$BUILD_SCRIPT_SOURCE_DIR/llvm"
 
 if [[ ! -f llvm-7.0.0.src.tar.xz ]];
 then
@@ -193,8 +193,8 @@ fi
 # Clang front end
 ################################################################
 
-mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/tools/clang"
-cd "$BUILD_SCRIPT_SOURCE_DIR/tools/clang"
+mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/llvm/tools/clang"
+cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/tools/clang"
 
 if [[ ! -f cfe-7.0.0.src.tar.xz ]];
 then
@@ -223,8 +223,8 @@ fi
 # Clang Tools
 ################################################################
 
-mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/tools/clang/tools/extra"
-cd "$BUILD_SCRIPT_SOURCE_DIR/tools/clang/tools/extra"
+mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/llvm/tools/clang/tools/extra"
+cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/tools/clang/tools/extra"
 
 if [[ ! -f clang-tools-extra-7.0.0.src.tar.xz ]];
 then
@@ -253,8 +253,8 @@ fi
 # LLD Linker
 ################################################################
 
-mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/tools/lld"
-cd "$BUILD_SCRIPT_SOURCE_DIR/tools/lld"
+mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/llvm/tools/lld"
+cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/tools/lld"
 
 if [[ ! -f lld-7.0.0.src.tar.xz ]];
 then
@@ -283,8 +283,8 @@ fi
 # Polly optimizer
 ################################################################
 
-mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/tools/polly"
-cd "$BUILD_SCRIPT_SOURCE_DIR/tools/polly"
+mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/llvm/tools/polly"
+cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/tools/polly"
 
 if [[ ! -f polly-7.0.0.src.tar.xz ]];
 then
@@ -313,8 +313,8 @@ fi
 # Compiler-RT
 ################################################################
 
-mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/projects/compiler-rt"
-cd "$BUILD_SCRIPT_SOURCE_DIR/projects/compiler-rt"
+mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/llvm/projects/compiler-rt"
+cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/projects/compiler-rt"
 
 if [[ ! -f compiler-rt-7.0.0.src.tar.xz ]];
 then
@@ -345,8 +345,8 @@ fi
 
 if [[ "$BUILD_SCRIPT_LIBCXX" = "ON" ]]; then
 
-mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/projects/libcxx"
-cd "$BUILD_SCRIPT_SOURCE_DIR/projects/libcxx"
+mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/llvm/projects/libcxx"
+cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/projects/libcxx"
 
 if [[ ! -f libcxx-7.0.0.src.tar.xz ]];
 then
@@ -371,19 +371,6 @@ then
 	touch libcxx-7.0.0.src.unpacked
 fi
 
-if [[ "$BUILD_SCRIPT_TARGET_ARCH" = "PowerPC" ]];
-then
-	# https://bugzilla.redhat.com/show_bug.cgi?id=1538817
-	if [[ ! -f thread.patched ]];
-	then
-		echo "Patching libcxx/include/thread"
-		THIS_FILE=include/thread
-		sed -i "s/_LIBCPP_CONSTEXPR duration<long double> _Max/const duration<long double> _Max/g" "$THIS_FILE" > "$THIS_FILE.patched"
-		mv "$THIS_FILE.patched" "$THIS_FILE"
-		touch thread.patched
-	fi
-fi
-
 # BUILD_SCRIPT_LIBCXX
 fi
 
@@ -393,8 +380,8 @@ fi
 
 if [[ "$BUILD_SCRIPT_LIBCXX" = "ON" ]]; then
 
-mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/projects/libcxxabi"
-cd "$BUILD_SCRIPT_SOURCE_DIR/projects/libcxxabi"
+mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/llvm/projects/libcxxabi"
+cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/projects/libcxxabi"
 
 if [[ ! -f libcxxabi-7.0.0.src.tar.xz ]];
 then
@@ -431,8 +418,8 @@ fi
 
 if false; then
 
-mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/projects/libunwind"
-cd "$BUILD_SCRIPT_SOURCE_DIR/projects/libunwind"
+mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/llvm/projects/libunwind"
+cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/projects/libunwind"
 
 if [[ ! -f libunwind-7.0.0.src.tar.xz ]];
 then
@@ -473,8 +460,8 @@ fi
 if [[ "$BUILD_SCRIPT_TESTS" = "ON" ]]; then
 
 # https://llvm.org/docs/GettingStarted.html#checkout-llvm-from-subversion
-mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/projects/test-suite"
-cd "$BUILD_SCRIPT_SOURCE_DIR/projects/test-suite"
+mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/llvm/projects/test-suite"
+cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/projects/test-suite"
 
 if [[ ! -f test-suite-7.0.0.src.tar.xz ]];
 then
@@ -503,20 +490,51 @@ fi
 fi
 
 ################################################################
+# Patch for https://bugzilla.redhat.com/show_bug.cgi?id=1538817
+################################################################
+
+if [[ "$BUILD_SCRIPT_TARGET_ARCH" = "PowerPC" ]]; then
+
+if [[ "$BUILD_SCRIPT_LIBCXX" = "ON" ]];
+then
+	if [[ ! -f "$BUILD_SCRIPT_SOURCE_DIR/llvm/projects/libcxx/thread.patched" ]];
+	then
+		echo "Patching libcxx/include/thread"
+		cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/projects/libcxx"
+
+		THIS_FILE=include/thread
+		sed -i "s/_LIBCPP_CONSTEXPR duration<long double> _Max/const duration<long double> _Max/g" "$THIS_FILE" > "$THIS_FILE.patched"
+		mv "$THIS_FILE.patched" "$THIS_FILE"
+		touch "$BUILD_SCRIPT_SOURCE_DIR/llvm/projects/libcxx/thread.patched"
+	fi
+fi
+
+fi
+
+################################################################
 # Patches from https://reviews.llvm.org/D54787
 ################################################################
 
 # Needed for PowerPC. Also see https://bugs.llvm.org/show_bug.cgi?id=39704
 if [[ "$BUILD_SCRIPT_TARGET_ARCH" = "PowerPC" ]]; then
 
-if [[ ! -f "$BUILD_SCRIPT_SOURCE_DIR/tools/clang/lib/Headers/altivec.h.patched" ]];
+if [[ ! -f "$BUILD_SCRIPT_SOURCE_DIR/llvm/tools/clang/lib/Headers/altivec.h.patched" ]];
 then
 	echo "Patching altivec.h"
-	cd "$BUILD_SCRIPT_SOURCE_DIR/tools/clang/lib/Headers/"
+	cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/tools/clang/lib/Headers/"
 	
-	if wget "$INSECURE" "https://reviews.llvm.org/file/data/pqvafnefzlkhyubairgc/PHID-FILE-t22yd7z53iacq5375jrt/lib_Headers_altivec.h" -O altivec.h;
+	URL='https://reviews.llvm.org/file/data/pqvafnefzlkhyubairgc/PHID-FILE-t22yd7z53iacq5375jrt/lib_Headers_altivec.h'
+
+	if wget "$URL" -O altivec.h;
 	then	
-		touch "$BUILD_SCRIPT_SOURCE_DIR/tools/clang/lib/Headers/altivec.h.patched"
+		touch "altivec.h.patched"
+	else
+		echo "Attempting to download altivec.h over insecure channel"
+		if wget "$INSECURE" "$URL" -O altivec.h;
+			touch "altivec.h.patched"
+		then
+			echo "Failed to patch altivec.h"
+		fi
 	fi
 fi
 
@@ -527,26 +545,44 @@ if false; then
 if [[ "$BUILD_SCRIPT_TESTS" = "ON" ]]; then
 
 # Part of 'make check', not LLVM Test Suite
-if [[ ! -f "$BUILD_SCRIPT_SOURCE_DIR/test/CodeGen/test_CodeGen_builtins-ppc-altivec.c" ]];
+if [[ ! -f "$BUILD_SCRIPT_SOURCE_DIR/llvm/test/CodeGen/test_CodeGen_builtins-ppc-altivec.c.patched" ]];
 then
 	echo "Patching test_CodeGen_builtins-ppc-altivec.c"
-	cd "$BUILD_SCRIPT_SOURCE_DIR/test/CodeGen/"
-	
-	if wget "$INSECURE" "https://reviews.llvm.org/file/data/vzh7jxxovv6dkijjtx65/PHID-FILE-vclvlhuqaauv753flmvi/test_CodeGen_builtins-ppc-altivec.c" -O test_CodeGen_builtins-ppc-altivec.c;
+	cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/test/CodeGen/"
+
+	URL='https://reviews.llvm.org/file/data/vzh7jxxovv6dkijjtx65/PHID-FILE-vclvlhuqaauv753flmvi/test_CodeGen_builtins-ppc-altivec.c'
+
+	if wget "$URL" -O test_CodeGen_builtins-ppc-altivec.c;
 	then	
-		touch "$BUILD_SCRIPT_SOURCE_DIR/test/CodeGen/test_CodeGen_builtins-ppc-altivec.c"
+		touch "test_CodeGen_builtins-ppc-altivec.c.patched"
+	else
+		echo "Attempting to download test_CodeGen_builtins-ppc-altivec.c over insecure channel"
+		if wget "$INSECURE" "$URL" -O test_CodeGen_builtins-ppc-altivec.c;
+			touch "test_CodeGen_builtins-ppc-altivec.c.patched"
+		then
+			echo "Failed to patch test_CodeGen_builtins-ppc-altivec.c"
+		fi
 	fi
 fi
 
 # Part of 'make check', not LLVM Test Suite
-if [[ ! -f "$BUILD_SCRIPT_SOURCE_DIR/test/CodeGen/test_CodeGen_builtins-ppc-vsx.c.patched" ]];
+if [[ ! -f "$BUILD_SCRIPT_SOURCE_DIR/llvm/test/CodeGen/test_CodeGen_builtins-ppc-vsx.c.patched" ]];
 then
 	echo "Patching test_CodeGen_builtins-ppc-vsx.c"
-	cd "$BUILD_SCRIPT_SOURCE_DIR/test/CodeGen/"
-	
-	if wget "$INSECURE" "https://reviews.llvm.org/file/data/xdlnjqv4y6zc76r6kouh/PHID-FILE-5njcjgb57h6gncc6y5he/test_CodeGen_builtins-ppc-vsx.c" -O test_CodeGen_builtins-ppc-vsx.c;
+	cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/test/CodeGen/"
+
+	URL='https://reviews.llvm.org/file/data/xdlnjqv4y6zc76r6kouh/PHID-FILE-5njcjgb57h6gncc6y5he/test_CodeGen_builtins-ppc-vsx.c'
+
+	if wget "$URL" -O test_CodeGen_builtins-ppc-vsx.c;
 	then	
-		touch "$BUILD_SCRIPT_SOURCE_DIR/test/CodeGen/test_CodeGen_builtins-ppc-vsx.c.patched"
+		touch "test_CodeGen_builtins-ppc-vsx.c.patched"
+	else
+		echo "Attempting to download test_CodeGen_builtins-ppc-vsx.c over insecure channel"
+		if wget "$INSECURE" "$URL" -O test_CodeGen_builtins-ppc-vsx.c;
+			touch "test_CodeGen_builtins-ppc-vsx.c.patched"
+		then
+			echo "Failed to patch test_CodeGen_builtins-ppc-vsx.c"
+		fi
 	fi
 fi
 
@@ -566,39 +602,39 @@ fi
 cd "$BUILD_SCRIPT_BUILD_DIR"
 
 CMAKE_ARGS=()
-CMAKE_ARGS+=(-DCMAKE_INSTALL_PREFIX="$BUILD_SCRIPT_INSTALL_PREFIX")
-CMAKE_ARGS+=(-DLLVM_TARGETS_TO_BUILD="$BUILD_SCRIPT_TARGET_ARCH")
-CMAKE_ARGS+=(-DLLVM_PARALLEL_COMPILE_JOBS="$BUILD_SCRIPT_COMPILE_JOBS")
-CMAKE_ARGS+=(-DCMAKE_BUILD_TYPE="Release")
-CMAKE_ARGS+=(-DLLVM_INCLUDE_TOOLS="ON")
+CMAKE_ARGS+=("-DCMAKE_INSTALL_PREFIX=$BUILD_SCRIPT_INSTALL_PREFIX")
+CMAKE_ARGS+=("-DLLVM_TARGETS_TO_BUILD=$BUILD_SCRIPT_TARGET_ARCH")
+CMAKE_ARGS+=("-DLLVM_PARALLEL_COMPILE_JOBS=$BUILD_SCRIPT_COMPILE_JOBS")
+CMAKE_ARGS+=("-DCMAKE_BUILD_TYPE=Release")
+CMAKE_ARGS+=("-DLLVM_INCLUDE_TOOLS=ON")
 
 if [[ "$BUILD_SCRIPT_LIBCXX" = "ON" ]]; then
-	CMAKE_ARGS+=(-DLIBCXX_LIBCPPABI_VERSION="")
+	CMAKE_ARGS+=("-DLIBCXX_LIBCPPABI_VERSION=''")
 fi
 
 if [[ "$BUILD_SCRIPT_TESTS" = "ON" ]]; then
-	CMAKE_ARGS+=(-DLLVM_BUILD_TESTS="ON")
+	CMAKE_ARGS+=("-DLLVM_BUILD_TESTS=ON")
 else
-	CMAKE_ARGS+=(-DLLVM_BUILD_TESTS="OFF")
+	CMAKE_ARGS+=("-DLLVM_BUILD_TESTS=OFF")
 fi
 
 # Add CC and CXX to CMake if provided in the environment.
 if [[ ! -z "$CC" ]]; then
-	CMAKE_ARGS+=(-DCMAKE_C_COMPILER="$CC")
+	CMAKE_ARGS+=("-DCMAKE_C_COMPILER=$CC")
 fi
 if [[ ! -z "$CXX" ]]; then
-	CMAKE_ARGS+=(-DCMAKE_CXX_COMPILER="$CXX")
+	CMAKE_ARGS+=("-DCMAKE_CXX_COMPILER=$CXX")
 fi
 
 if true; then
 	echo
 	echo "*****************************************************************************"
-	echo "CMake arguments: ${CMAKE_ARGS[@]}"
+	echo "CMake arguments: ${CMAKE_ARGS[*]}"
 	echo "*****************************************************************************"
 	echo
 fi
 
-if ! "$CMAKE" "${CMAKE_ARGS[@]}" "$BUILD_SCRIPT_SOURCE_DIR";
+if ! "$CMAKE" "${CMAKE_ARGS[@]}" "$BUILD_SCRIPT_SOURCE_DIR/llvm";
 then
 	echo "Failed to cmake LLVM sources"
 	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
@@ -622,7 +658,7 @@ echo "  cd $BUILD_SCRIPT_BUILD_DIR"
 echo "  sudo make install"
 echo "Then, optionally:"
 echo "  cd ~"
-echo "  rm -rf \"$BUILD_SCRIPT_SOURCE_DIR\" \"$BUILD_SCRIPT_BUILD_DIR\""
+echo "  rm -rf \"$BUILD_SCRIPT_SOURCE_DIR/llvm\" \"$BUILD_SCRIPT_BUILD_DIR\""
 echo "*****************************************************************************"
 
 [[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 0 || return 0
