@@ -149,6 +149,20 @@ case "$LOWER_HOST" in
 		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
 esac
 
+if true; then
+	echo
+	echo "*****************************************************************************"
+	echo "BUILD_SCRIPT_SOURCE_DIR: $BUILD_SCRIPT_SOURCE_DIR"
+	echo "BUILD_SCRIPT_BUILD_DIR: $BUILD_SCRIPT_BUILD_DIR"
+	echo "BUILD_SCRIPT_COMPILE_JOBS: $BUILD_SCRIPT_COMPILE_JOBS"
+	echo "BUILD_SCRIPT_INSTALL_PREFIX: $BUILD_SCRIPT_INSTALL_PREFIX"
+	echo "BUILD_SCRIPT_TOOLS: $BUILD_SCRIPT_TOOLS"
+	echo "BUILD_SCRIPT_LIBCXX: $BUILD_SCRIPT_LIBCXX"
+	echo "BUILD_SCRIPT_TESTS: $BUILD_SCRIPT_TESTS"
+	echo "*****************************************************************************"
+	echo
+fi
+
 ################################################################
 # Exit
 ################################################################
