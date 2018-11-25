@@ -14,7 +14,7 @@ There are several variables of interest you can tune for the build:
 * `BUILD_SCRIPT_BUILD_DIR` - scratch directory to build the the sources. Output artifacts are in this directory. The default value is `$HOME/llvm_build`.
 * `BUILD_SCRIPT_MAKE_JOBS` - the number of concurrent make jobs. The default value is `4`.
 * `BUILD_SCRIPT_LIBCXX` - controls libcxx and libcxxabi. The default value is `OFF` because building libc++ mostly does not work.
-* `BUILD_SCRIPT_TESTS` - controls the Test Suite. The self tests are always run, but the Test Suite is a different download. The default value is `OFF`
+* `BUILD_SCRIPT_TESTS` - controls the Test Suite. The self tests are always run, but the Test Suite is a different download. The default value is `ON`.
 
 # Building the sources
 
@@ -39,7 +39,7 @@ And more options:
     CMAKE="$HOME/cmake/bin/cmake" \
     PREFIX="$HOME/llvm" \
     BUILD_SCRIPT_LIBCXX="ON" \
-    BUILD_SCRIPT_TESTS="ON" \
+    BUILD_SCRIPT_TESTS="OFF" \
     BUILD_SCRIPT_COMPILE_JOBS="8" \
 ./build-llvm.sh
 ```

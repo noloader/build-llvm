@@ -25,7 +25,6 @@
 #  - port to Solaris (tar and --strip-component)
 #  - investiagte RPATHs using ${ORIGIN}. Also see https://bit.ly/2RW4CGL
 #  - investiagte install_names on OS X
-#  - set LLVM_BUILD_TESTS="ON" eventually
 
 ################################################################
 # Variables
@@ -60,7 +59,7 @@ fi
 # Download and install the additional self tests. LLVM
 # has a minimal set of tests without the additional ones.
 if [[ -z "$BUILD_SCRIPT_TESTS" ]]; then
-	BUILD_SCRIPT_TESTS="OFF"
+	BUILD_SCRIPT_TESTS="ON"
 fi
 
 # Concurrent make jobs
@@ -451,9 +450,6 @@ fi
 # Test suite
 ################################################################
 
-# TODO: Use the newly built compiler to build the test suite
-# TODO: Turn LLVM_BUILD_TESTS to ON
-#
 # - https://llvm.org/docs/TestingGuide.html
 # - https://llvm.org/docs/TestSuiteGuide.html
 
