@@ -94,15 +94,15 @@ fi
 BUILD_SCRIPT_TARGET_ARCH="Unknown"
 
 # https://llvm.org/docs/GettingStarted.html#local-llvm-configuration
-BUILD_SCRIPT_HOST=$(uname -m)
+BUILD_SCRIPT_ARCH=$(uname -m)
 if [[ $(uname -s) = "AIX" ]]; then
-	BUILD_SCRIPT_HOST="aix";
+	BUILD_SCRIPT_ARCH="aix";
 fi
 
 # These should be OK. "power" captures "Power Macintosh".
 # libcxx and libcxxabi only seems to work on X86 Linux.
-LOWER_HOST=$(echo "$BUILD_SCRIPT_HOST" | tr '[:upper:]' '[:lower:]')
-case "$LOWER_HOST" in
+LOWER_ARCH=$(echo "$BUILD_SCRIPT_ARCH" | tr '[:upper:]' '[:lower:]')
+case "$LOWER_ARCH" in
 	i86pc)
 		echo "Setting BUILD_SCRIPT_TOOLS=OFF BUILD_SCRIPT_LIBCXX=OFF for X86"
 		BUILD_SCRIPT_TOOLS="OFF"
@@ -112,40 +112,28 @@ case "$LOWER_HOST" in
 		echo "Setting BUILD_SCRIPT_LIBCXX=ON for X86"
 		BUILD_SCRIPT_LIBCXX="ON"
 		BUILD_SCRIPT_TARGET_ARCH="X86" ;;
-	x86_64)
+	amd64|x86_64)
 		echo "Setting BUILD_SCRIPT_LIBCXX=ON for X86"
 		BUILD_SCRIPT_LIBCXX="ON"
 		BUILD_SCRIPT_TARGET_ARCH="X86" ;;
-	amd64)
-		echo "Setting BUILD_SCRIPT_LIBCXX=ON for X86"
-		BUILD_SCRIPT_LIBCXX="ON"
-		BUILD_SCRIPT_TARGET_ARCH="X86" ;;
-	aix)
+	aix|ppc*|power*)
 		echo "Setting BUILD_SCRIPT_LIBCXX=OFF for PowerPC"
 		BUILD_SCRIPT_LIBCXX="OFF"
 		BUILD_SCRIPT_TARGET_ARCH="PowerPC" ;;
-	ppc*)
-		echo "Setting BUILD_SCRIPT_LIBCXX=OFF for PowerPC"
-		BUILD_SCRIPT_LIBCXX="OFF"
-		BUILD_SCRIPT_TARGET_ARCH="PowerPC" ;;
-	power*)
-		echo "Setting BUILD_SCRIPT_LIBCXX=OFF for PowerPC"
-		BUILD_SCRIPT_LIBCXX="OFF"
-		BUILD_SCRIPT_TARGET_ARCH="PowerPC" ;;
-	arm*)
-		BUILD_SCRIPT_TARGET_ARCH="ARM" ;;
-	eabihf)
+	eabihf|arm*)
 		BUILD_SCRIPT_TARGET_ARCH="ARM" ;;
 	aarch*)
 		BUILD_SCRIPT_TARGET_ARCH="AArch64" ;;
 	mips*)
+		echo "Setting BUILD_SCRIPT_LIBCXX=OFF for MIPS"
+		BUILD_SCRIPT_LIBCXX="OFF"
 		BUILD_SCRIPT_TARGET_ARCH="Mips" ;;
-	sun)
-		BUILD_SCRIPT_TARGET_ARCH="Sparc" ;;
-	sparc*)
+	sun|sparc*)
+		echo "Setting BUILD_SCRIPT_LIBCXX=OFF for SPARC"
+		BUILD_SCRIPT_LIBCXX="OFF"
 		BUILD_SCRIPT_TARGET_ARCH="Sparc" ;;
 	*)
-		echo "Unknown host platform $BUILD_SCRIPT_HOST"
+		echo "Unknown host platform $BUILD_SCRIPT_ARCH"
 		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
 esac
 
