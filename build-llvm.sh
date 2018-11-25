@@ -36,6 +36,8 @@ CMAKE="${CMAKE:-cmake}"
 MAKE="${MAKE:-make}"
 TAR="${TAR:-tar}"
 
+INSECURE=--no-check-certificate
+
 # AIX and Solaris override
 if [[ "$MAKE" = "make" ]] && [[ $(command -v gmake) ]]; then
 	MAKE=$(command -v gmake)
@@ -164,7 +166,7 @@ then
 	if ! wget https://releases.llvm.org/7.0.0/llvm-7.0.0.src.tar.xz;
 	then
 		echo "Attempting download LLVM using insecure channel."
-		if ! wget --no-check-certificate https://releases.llvm.org/7.0.0/llvm-7.0.0.src.tar.xz;
+		if ! wget "$INSECURE" https://releases.llvm.org/7.0.0/llvm-7.0.0.src.tar.xz;
 		then
 			echo "Failed to download LLVM sources"
 			[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
@@ -194,7 +196,7 @@ then
 	if ! wget https://releases.llvm.org/7.0.0/cfe-7.0.0.src.tar.xz;
 	then
 		echo "Attempting download Clang front end using insecure channel."
-		if ! wget --no-check-certificate https://releases.llvm.org/7.0.0/cfe-7.0.0.src.tar.xz;
+		if ! wget "$INSECURE" https://releases.llvm.org/7.0.0/cfe-7.0.0.src.tar.xz;
 		then
 			echo "Failed to download Clang front end sources"
 			[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
@@ -224,7 +226,7 @@ then
 	if ! wget https://releases.llvm.org/7.0.0/clang-tools-extra-7.0.0.src.tar.xz;
 	then
 		echo "Attempting download Clang Tools using insecure channel."
-		if ! wget --no-check-certificate https://releases.llvm.org/7.0.0/clang-tools-extra-7.0.0.src.tar.xz;
+		if ! wget "$INSECURE" https://releases.llvm.org/7.0.0/clang-tools-extra-7.0.0.src.tar.xz;
 		then
 			echo "Failed to download Clang Tools sources"
 			[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
@@ -254,7 +256,7 @@ then
 	if ! wget https://releases.llvm.org/7.0.0/lld-7.0.0.src.tar.xz;
 	then
 		echo "Attempting download LLD Linker using insecure channel."
-		if ! wget --no-check-certificate https://releases.llvm.org/7.0.0/lld-7.0.0.src.tar.xz;
+		if ! wget "$INSECURE" https://releases.llvm.org/7.0.0/lld-7.0.0.src.tar.xz;
 		then
 			echo "Failed to download LLD Linker sources"
 			[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
@@ -284,7 +286,7 @@ then
 	if ! wget https://releases.llvm.org/7.0.0/polly-7.0.0.src.tar.xz;
 	then
 		echo "Attempting download Polly Optimizer using insecure channel."
-		if ! wget --no-check-certificate https://releases.llvm.org/7.0.0/polly-7.0.0.src.tar.xz;
+		if ! wget "$INSECURE" https://releases.llvm.org/7.0.0/polly-7.0.0.src.tar.xz;
 		then
 			echo "Failed to download Polly Optimizer sources"
 			[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
@@ -314,7 +316,7 @@ then
 	if ! wget https://releases.llvm.org/7.0.0/compiler-rt-7.0.0.src.tar.xz;
 	then
 		echo "Attempting download Compiler-RT using insecure channel."
-		if ! wget --no-check-certificate https://releases.llvm.org/7.0.0/compiler-rt-7.0.0.src.tar.xz;
+		if ! wget "$INSECURE" https://releases.llvm.org/7.0.0/compiler-rt-7.0.0.src.tar.xz;
 		then
 			echo "Failed to download Compiler-RT sources"
 			[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
@@ -346,7 +348,7 @@ then
 	if ! wget https://releases.llvm.org/7.0.0/libcxx-7.0.0.src.tar.xz;
 	then
 		echo "Attempting download libc++ using insecure channel."
-		if ! wget --no-check-certificate https://releases.llvm.org/7.0.0/libcxx-7.0.0.src.tar.xz;
+		if ! wget "$INSECURE" https://releases.llvm.org/7.0.0/libcxx-7.0.0.src.tar.xz;
 		then
 			echo "Failed to download libc++ sources"
 			[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
@@ -377,6 +379,7 @@ then
 	fi
 fi
 
+# BUILD_SCRIPT_LIBCXX
 fi
 
 ################################################################
@@ -393,7 +396,7 @@ then
 	if ! wget https://releases.llvm.org/7.0.0/libcxxabi-7.0.0.src.tar.xz;
 	then
 		echo "Attempting download libc++abi using insecure channel."
-		if ! wget --no-check-certificate https://releases.llvm.org/7.0.0/libcxxabi-7.0.0.src.tar.xz;
+		if ! wget "$INSECURE" https://releases.llvm.org/7.0.0/libcxxabi-7.0.0.src.tar.xz;
 		then
 			echo "Failed to download libc++abi sources"
 			[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
@@ -411,6 +414,7 @@ then
 	touch libcxxabi-7.0.0.src.unpacked
 fi
 
+# BUILD_SCRIPT_LIBCXX
 fi
 
 ################################################################
@@ -430,7 +434,7 @@ then
 	if ! wget https://releases.llvm.org/7.0.0/libunwind-7.0.0.src.tar.xz;
 	then
 		echo "Attempting download libunwind using insecure channel."
-		if ! wget --no-check-certificate https://releases.llvm.org/7.0.0/libunwind-7.0.0.src.tar.xz;
+		if ! wget "$INSECURE" https://releases.llvm.org/7.0.0/libunwind-7.0.0.src.tar.xz;
 		then
 			echo "Failed to download libunwind sources"
 			[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
@@ -472,7 +476,7 @@ then
 	if ! wget https://releases.llvm.org/7.0.0/test-suite-7.0.0.src.tar.xz;
 	then
 		echo "Attempting download Test Suite using insecure channel."
-		if ! wget --no-check-certificate https://releases.llvm.org/7.0.0/test-suite-7.0.0.src.tar.xz;
+		if ! wget "$INSECURE" https://releases.llvm.org/7.0.0/test-suite-7.0.0.src.tar.xz;
 		then
 			echo "Failed to download Test Suite sources"
 			[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
@@ -505,35 +509,43 @@ then
 	echo "Patching altivec.h"
 	cd "$BUILD_SCRIPT_SOURCE_DIR/tools/clang/lib/Headers/"
 	
-	if wget --no-check-certificate "https://reviews.llvm.org/file/data/pqvafnefzlkhyubairgc/PHID-FILE-t22yd7z53iacq5375jrt/lib_Headers_altivec.h" -O altivec.h;
+	if wget "$INSECURE" "https://reviews.llvm.org/file/data/pqvafnefzlkhyubairgc/PHID-FILE-t22yd7z53iacq5375jrt/lib_Headers_altivec.h" -O altivec.h;
 	then	
 		touch "$BUILD_SCRIPT_SOURCE_DIR/tools/clang/lib/Headers/altivec.h.patched"
 	fi
 fi
 
+# Not compatible with LLVM 7.0
+if false; then
+
 # Only fetch these if BUILD_SCRIPT_TESTS is ON
 if [[ "$BUILD_SCRIPT_TESTS" = "true" ]]; then
 
+# Part of 'make check', not LLVM Test Suite
 if [[ ! -f "$BUILD_SCRIPT_SOURCE_DIR/test/CodeGen/test_CodeGen_builtins-ppc-altivec.c" ]];
 then
 	echo "Patching test_CodeGen_builtins-ppc-altivec.c"
 	cd "$BUILD_SCRIPT_SOURCE_DIR/test/CodeGen/"
 	
-	if wget --no-check-certificate "https://reviews.llvm.org/file/data/vzh7jxxovv6dkijjtx65/PHID-FILE-vclvlhuqaauv753flmvi/test_CodeGen_builtins-ppc-altivec.c" -O test_CodeGen_builtins-ppc-altivec.c;
+	if wget "$INSECURE" "https://reviews.llvm.org/file/data/vzh7jxxovv6dkijjtx65/PHID-FILE-vclvlhuqaauv753flmvi/test_CodeGen_builtins-ppc-altivec.c" -O test_CodeGen_builtins-ppc-altivec.c;
 	then	
 		touch "$BUILD_SCRIPT_SOURCE_DIR/test/CodeGen/test_CodeGen_builtins-ppc-altivec.c"
 	fi
 fi
 
+# Part of 'make check', not LLVM Test Suite
 if [[ ! -f "$BUILD_SCRIPT_SOURCE_DIR/test/CodeGen/test_CodeGen_builtins-ppc-vsx.c.patched" ]];
 then
 	echo "Patching test_CodeGen_builtins-ppc-vsx.c"
 	cd "$BUILD_SCRIPT_SOURCE_DIR/test/CodeGen/"
 	
-	if wget --no-check-certificate "https://reviews.llvm.org/file/data/xdlnjqv4y6zc76r6kouh/PHID-FILE-5njcjgb57h6gncc6y5he/test_CodeGen_builtins-ppc-vsx.c" -O test_CodeGen_builtins-ppc-vsx.c;
+	if wget "$INSECURE" "https://reviews.llvm.org/file/data/xdlnjqv4y6zc76r6kouh/PHID-FILE-5njcjgb57h6gncc6y5he/test_CodeGen_builtins-ppc-vsx.c" -O test_CodeGen_builtins-ppc-vsx.c;
 	then	
 		touch "$BUILD_SCRIPT_SOURCE_DIR/test/CodeGen/test_CodeGen_builtins-ppc-vsx.c.patched"
 	fi
+fi
+
+# false
 fi
 
 # BUILD_SCRIPT_TESTS
