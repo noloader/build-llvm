@@ -84,6 +84,14 @@ fi
 # CMake build
 ################################################################
 
+if true; then
+	echo
+	echo "*****************************************************************************"
+	echo "CMake arguments: ${CMAKE_ARGS[*]}"
+	echo "*****************************************************************************"
+	echo
+fi
+
 if ! CC="$CC" CXX="$CXX" ./bootstrap --prefix="$PREFIX";
 then
 	echo "Failed to bootstrap CMake sources"
