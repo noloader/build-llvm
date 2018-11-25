@@ -10,21 +10,15 @@
 #  - https://llvm.org/docs/CMake.html
 #  - https://releases.llvm.org/download.html
 
-# The libcxx and libcxxabi recipes are currently broken. There's a
-# problem with a missing symbol called __thread_local_data(). We don't
-# know how to work around it, and our LLVM mailing list questions have
+# The libcxx and libcxxabi recipes are mostly broken. They only work on X86.
+# There's a problem with a missing symbol called __thread_local_data(). We
+# don't know how to work around, and our LLVM mailing list questions have
 # not been answered. Also see https://stackoverflow.com/q/53356172/608639.
-
-# If you find a LLVM provided script you should use it instead. We could not
-# find one so we are suffering the build process like hundreds of other
-# developers before us.
 
 # TODO
 #
-#  - fix libcxx and libcxxabi recipes
-#  - port to Solaris (tar and --strip-component)
-#  - investiagte RPATHs using ${ORIGIN}. Also see https://bit.ly/2RW4CGL
-#  - investiagte install_names on OS X
+#  - Figure out libcxx and libcxxabi build procedure on some other
+#    useful platforms like PowerPC. 
 
 ################################################################
 # Variables
@@ -35,6 +29,9 @@ CMAKE="${CMAKE:-cmake}"
 MAKE="${MAKE:-make}"
 TAR="${TAR:-tar}"
 
+# Wget falls back to insecure check if the secure fetch fails. This is
+# needed for Wget builds that use OpenSSL instead of GnuTLS. Also see
+# https://lists.gnu.org/archive/html/bug-wget/2017-10/msg00004.html
 INSECURE=--no-check-certificate
 
 # AIX and Solaris override
