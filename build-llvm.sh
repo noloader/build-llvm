@@ -122,12 +122,15 @@ case "$LOWER_HOST" in
 		BUILD_SCRIPT_TARGET_ARCH="X86" ;;
 	aix)
 		echo "Setting BUILD_SCRIPT_LIBCXX=OFF for PowerPC"
+		BUILD_SCRIPT_LIBCXX="OFF"
 		BUILD_SCRIPT_TARGET_ARCH="PowerPC" ;;
 	ppc*)
 		echo "Setting BUILD_SCRIPT_LIBCXX=OFF for PowerPC"
+		BUILD_SCRIPT_LIBCXX="OFF"
 		BUILD_SCRIPT_TARGET_ARCH="PowerPC" ;;
 	power*)
 		echo "Setting BUILD_SCRIPT_LIBCXX=OFF for PowerPC"
+		BUILD_SCRIPT_LIBCXX="OFF"
 		BUILD_SCRIPT_TARGET_ARCH="PowerPC" ;;
 	arm*)
 		BUILD_SCRIPT_TARGET_ARCH="ARM" ;;
@@ -553,6 +556,7 @@ then
 	fi
 fi
 
+# BUILD_SCRIPT_TARGET_ARCH=PowerPC
 fi
 
 ################################################################
