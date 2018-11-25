@@ -51,6 +51,7 @@ trap finish EXIT
 # CMake sources
 ################################################################
 
+echo "Removing previous cmake_build"
 if [[ -d "$HOME/cmake_build" ]]; then
 	rm -rf "$HOME/cmake_build"
 fi
@@ -61,6 +62,7 @@ if ! cd "$HOME/cmake_build"; then
 	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
 fi
 
+echo "Downloading CMake 3.12.14 tarball"
 if [[ ! -f cmake-3.12.4.tar.gz ]];
 then
 	if ! wget https://cmake.org/files/v3.12/cmake-3.12.4.tar.gz;
@@ -74,6 +76,7 @@ then
 	fi
 fi
 
+echo "Unpacking CMake 3.12.14 tarball"
 if [[ ! -f cmake-3.12.4.unpacked ]];
 then
 	if ! "$TAR" --strip-components=1 -xzf cmake-3.12.4.tar.gz;
@@ -96,7 +99,12 @@ fi
 #	echo
 #fi
 
-if ! CC="$CC" CXX="$CXX" ./bootstrap --prefix="$PREFIX";
+if [[ $(uname -s) = "AIX" ]]; then
+	echo "Fixing LDFLAGS"
+	LDFLAGS="$LDFLAGS -Wl,-bbigtoc"
+fi
+
+if ! CC="$CC" CXX="$CXX" LDFLAGS="$LDFLAGS" ./bootstrap --prefix="$PREFIX" --parallel="$JOBS";
 then
 	echo "Failed to bootstrap CMake sources"
 	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1

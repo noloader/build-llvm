@@ -18,7 +18,7 @@
 # TODO
 #
 #  - Figure out libcxx and libcxxabi build procedure on some other
-#    useful platforms like PowerPC. 
+#    useful platforms like PowerPC.
 
 ################################################################
 # Variables
