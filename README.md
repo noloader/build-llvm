@@ -36,8 +36,8 @@ And more options:
 ```
     CMAKE="$HOME/cmake/bin/cmake" \
     PREFIX="$HOME/llvm" \
-    BUILD_SCRIPT_LIBCXX="true" \
-    BUILD_SCRIPT_TESTS="true" \
+    BUILD_SCRIPT_LIBCXX="ON" \
+    BUILD_SCRIPT_TESTS="ON" \
     BUILD_SCRIPT_COMPILE_JOBS="8" \
 ./build-llvm.sh
 ```
@@ -57,7 +57,7 @@ You can also delete `BUILD_SCRIPT_SOURCE_DIR` and `BUILD_SCRIPT_BUILD_DIR` after
 
 The libcxx and libcxxabi recipes are mostly broken. There's a problem with a missing symbol called `__thread_local_data()`. We don't know how to work around it, and our LLVM mailing list questions have not been answered. Also see https://stackoverflow.com/q/53356172/608639 and https://stackoverflow.com/q/53459921/608639.
 
-If you want to attempt to build libcxx and libcxxabi then set `BUILD_SCRIPT_LIBCXX=true`.
+If you want to attempt to build libcxx and libcxxabi then set `BUILD_SCRIPT_LIBCXX=ON`.
 
 # Building CMake
 

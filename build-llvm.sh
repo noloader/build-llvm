@@ -54,13 +54,13 @@ fi
 # https://stackoverflow.com/q/53356172/608639 and
 # https://stackoverflow.com/q/53459921/608639
 if [[ -z "$BUILD_SCRIPT_LIBCXX" ]]; then
-	BUILD_SCRIPT_LIBCXX="false"
+	BUILD_SCRIPT_LIBCXX="OFF"
 fi
 
 # Download and install the additional self tests. LLVM
 # has a minimal set of tests without the additional ones.
 if [[ -z "$BUILD_SCRIPT_TESTS" ]]; then
-	BUILD_SCRIPT_TESTS="false"
+	BUILD_SCRIPT_TESTS="OFF"
 fi
 
 # Concurrent make jobs
@@ -104,16 +104,21 @@ case "$LOWER_HOST" in
 	i.86)
 		BUILD_SCRIPT_TARGET_ARCH="X86" ;;
 	x86_64)
-		BUILD_SCRIPT_LIBCXX="true"
+		echo "Setting BUILD_SCRIPT_LIBCXX=ON for X86"
+		BUILD_SCRIPT_LIBCXX="ON"
 		BUILD_SCRIPT_TARGET_ARCH="X86" ;;
 	amd64)
-		BUILD_SCRIPT_LIBCXX="true"
+		echo "Setting BUILD_SCRIPT_LIBCXX=ON for X86"
+		BUILD_SCRIPT_LIBCXX="ON"
 		BUILD_SCRIPT_TARGET_ARCH="X86" ;;
 	aix)
+		echo "Setting BUILD_SCRIPT_LIBCXX=OFF for PowerPC"
 		BUILD_SCRIPT_TARGET_ARCH="PowerPC" ;;
 	ppc*)
+		echo "Setting BUILD_SCRIPT_LIBCXX=OFF for PowerPC"
 		BUILD_SCRIPT_TARGET_ARCH="PowerPC" ;;
 	power*)
+		echo "Setting BUILD_SCRIPT_LIBCXX=OFF for PowerPC"
 		BUILD_SCRIPT_TARGET_ARCH="PowerPC" ;;
 	arm*)
 		BUILD_SCRIPT_TARGET_ARCH="ARM" ;;
@@ -338,7 +343,7 @@ fi
 # libc++
 ################################################################
 
-if [[ "$BUILD_SCRIPT_LIBCXX" = "true" ]]; then
+if [[ "$BUILD_SCRIPT_LIBCXX" = "ON" ]]; then
 
 mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/projects/libcxx"
 cd "$BUILD_SCRIPT_SOURCE_DIR/projects/libcxx"
@@ -386,7 +391,7 @@ fi
 # libc++abi
 ################################################################
 
-if [[ "$BUILD_SCRIPT_LIBCXX" = "true" ]]; then
+if [[ "$BUILD_SCRIPT_LIBCXX" = "ON" ]]; then
 
 mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/projects/libcxxabi"
 cd "$BUILD_SCRIPT_SOURCE_DIR/projects/libcxxabi"
@@ -465,7 +470,7 @@ fi
 # - https://llvm.org/docs/TestingGuide.html
 # - https://llvm.org/docs/TestSuiteGuide.html
 
-if [[ "$BUILD_SCRIPT_TESTS" = "true" ]]; then
+if [[ "$BUILD_SCRIPT_TESTS" = "ON" ]]; then
 
 # https://llvm.org/docs/GettingStarted.html#checkout-llvm-from-subversion
 mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/projects/test-suite"
@@ -519,7 +524,7 @@ fi
 if false; then
 
 # Only fetch these if BUILD_SCRIPT_TESTS is ON
-if [[ "$BUILD_SCRIPT_TESTS" = "true" ]]; then
+if [[ "$BUILD_SCRIPT_TESTS" = "ON" ]]; then
 
 # Part of 'make check', not LLVM Test Suite
 if [[ ! -f "$BUILD_SCRIPT_SOURCE_DIR/test/CodeGen/test_CodeGen_builtins-ppc-altivec.c" ]];
@@ -567,11 +572,11 @@ CMAKE_ARGS+=(-DLLVM_PARALLEL_COMPILE_JOBS="$BUILD_SCRIPT_COMPILE_JOBS")
 CMAKE_ARGS+=(-DCMAKE_BUILD_TYPE="Release")
 CMAKE_ARGS+=(-DLLVM_INCLUDE_TOOLS="ON")
 
-if [[ "$BUILD_SCRIPT_LIBCXX" = "true" ]]; then
+if [[ "$BUILD_SCRIPT_LIBCXX" = "ON" ]]; then
 	CMAKE_ARGS+=(-DLIBCXX_LIBCPPABI_VERSION="")
 fi
 
-if [[ "$BUILD_SCRIPT_TESTS" = "true" ]]; then
+if [[ "$BUILD_SCRIPT_TESTS" = "ON" ]]; then
 	CMAKE_ARGS+=(-DLLVM_BUILD_TESTS="ON")
 else
 	CMAKE_ARGS+=(-DLLVM_BUILD_TESTS="OFF")
