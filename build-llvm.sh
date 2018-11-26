@@ -672,7 +672,9 @@ CMAKE_ARGS+=("-DLLVM_PARALLEL_COMPILE_JOBS=$BUILD_SCRIPT_COMPILE_JOBS")
 CMAKE_ARGS+=("-DCMAKE_BUILD_TYPE=Release")
 CMAKE_ARGS+=("-DLLVM_INCLUDE_TOOLS=ON")
 
-if [[ "$BUILD_SCRIPT_LIBCXX" = "ON" ]]; then
+# I don't know how to set this. Also see
+# https://stackoverflow.com/q/53459921/608639
+if [[ "$BUILD_SCRIPT_LIBCXX" = "OFF" ]]; then
 	CMAKE_ARGS+=("-DLIBCXX_LIBCPPABI_VERSION=''")
 fi
 

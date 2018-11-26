@@ -99,12 +99,19 @@ fi
 #	echo
 #fi
 
+# Hack. bootstrap --help does not list a method to set these flag
+# List our flags first so users can override them.
+CFLAGS="-DNDEBUG -g -O2 $CFLAGS"
+CXXFLAGS="-DNDEBUG -g -O2 $CXXFLAGS"
+
+# Hack. bootstrap --help does not list a method to set this flag
+# List our flags first so users can override them.
 if [[ $(uname -s) = "AIX" ]]; then
 	echo "Fixing LDFLAGS"
-	LDFLAGS="$LDFLAGS -Wl,-bbigtoc"
+	LDFLAGS="-Wl,-bbigtoc $LDFLAGS"
 fi
 
-if ! CC="$CC" CXX="$CXX" LDFLAGS="$LDFLAGS" ./bootstrap --prefix="$PREFIX" --parallel="$JOBS";
+if ! CC="$CC" CXX="$CXX" CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" LDFLAGS="$LDFLAGS" ./bootstrap --prefix="$PREFIX" --parallel="$JOBS";
 then
 	echo "Failed to bootstrap CMake sources"
 	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
