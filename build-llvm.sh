@@ -69,6 +69,11 @@ if [[ -z "$BUILD_SCRIPT_COMPILE_JOBS" ]]; then
 	BUILD_SCRIPT_COMPILE_JOBS="4"
 fi
 
+# # Easier override
+if [[ ! -z "$JOBS" ]]; then
+	BUILD_SCRIPT_COMPILE_JOBS="$JOBS"
+fi
+
 # Where to install the artifacts
 if [[ -z "$BUILD_SCRIPT_INSTALL_PREFIX" ]]; then
 	BUILD_SCRIPT_INSTALL_PREFIX="/opt/llvm"
