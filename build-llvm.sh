@@ -10,6 +10,10 @@
 #  - https://llvm.org/docs/CMake.html
 #  - https://releases.llvm.org/download.html
 
+# The script applies two patches:
+#  - https://bugs.llvm.org/show_bug.cgi?id=39704
+#  - https://bugzilla.redhat.com/show_bug.cgi?id=1538817
+
 # The libcxx and libcxxabi recipes are mostly broken. They only work on X86.
 # There's a problem with a missing symbol called __thread_local_data(). We
 # don't know how to work around, and our LLVM mailing list questions have
@@ -595,21 +599,19 @@ then
 	fi
 fi
 
-# Not compatible with LLVM 7.0
-if false; then
+# Also see https://bugs.llvm.org/show_bug.cgi?id=39704#c13
+mkdir -p "$BUILD_SCRIPT_SOURCE_DIR/llvm/tools/clang/test/CodeGen/"
 
-# Only fetch these if BUILD_SCRIPT_TESTS is ON
-if [[ "$BUILD_SCRIPT_TESTS" = "ON" ]]; then
+# if ! cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/test/CodeGen/"; then
+if ! cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/tools/clang/test/CodeGen/"; then
+	echo "Failed to enter directory"
+	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+fi
 
 # Part of 'make check', not LLVM Test Suite
-if [[ ! -f "$BUILD_SCRIPT_SOURCE_DIR/llvm/test/CodeGen/test_CodeGen_builtins-ppc-altivec.c.patched" ]];
+if [[ ! -f "test_CodeGen_builtins-ppc-altivec.c.patched" ]];
 then
 	echo "Patching test_CodeGen_builtins-ppc-altivec.c"
-
-	if ! cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/test/CodeGen/"; then
-		echo "Failed to enter directory"
-		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
-	fi
 
 	URL='https://reviews.llvm.org/file/data/vzh7jxxovv6dkijjtx65/PHID-FILE-vclvlhuqaauv753flmvi/test_CodeGen_builtins-ppc-altivec.c'
 
@@ -619,22 +621,24 @@ then
 	else
 		echo "Attempting to download test_CodeGen_builtins-ppc-altivec.c over insecure channel"
 		if wget "$INSECURE" "$URL" -O test_CodeGen_builtins-ppc-altivec.c;
-			touch "test_CodeGen_builtins-ppc-altivec.c.patched"
 		then
+			touch "test_CodeGen_builtins-ppc-altivec.c.patched"
+		else
 			echo "Failed to patch test_CodeGen_builtins-ppc-altivec.c"
 		fi
 	fi
 fi
 
+# if ! cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/test/CodeGen/"; then
+if ! cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/tools/clang/test/CodeGen/"; then
+	echo "Failed to enter directory"
+	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+fi
+
 # Part of 'make check', not LLVM Test Suite
-if [[ ! -f "$BUILD_SCRIPT_SOURCE_DIR/llvm/test/CodeGen/test_CodeGen_builtins-ppc-vsx.c.patched" ]];
+if [[ ! -f "test_CodeGen_builtins-ppc-vsx.c.patched" ]];
 then
 	echo "Patching test_CodeGen_builtins-ppc-vsx.c"
-
-	if ! cd "$BUILD_SCRIPT_SOURCE_DIR/llvm/test/CodeGen/"; then
-		echo "Failed to enter directory"
-		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
-	fi
 
 	URL='https://reviews.llvm.org/file/data/xdlnjqv4y6zc76r6kouh/PHID-FILE-5njcjgb57h6gncc6y5he/test_CodeGen_builtins-ppc-vsx.c'
 
@@ -644,17 +648,12 @@ then
 	else
 		echo "Attempting to download test_CodeGen_builtins-ppc-vsx.c over insecure channel"
 		if wget "$INSECURE" "$URL" -O test_CodeGen_builtins-ppc-vsx.c;
-			touch "test_CodeGen_builtins-ppc-vsx.c.patched"
 		then
+			touch "test_CodeGen_builtins-ppc-vsx.c.patched"
+		else
 			echo "Failed to patch test_CodeGen_builtins-ppc-vsx.c"
 		fi
 	fi
-fi
-
-# false
-fi
-
-# BUILD_SCRIPT_TESTS
 fi
 
 # BUILD_SCRIPT_TARGET_ARCH=PowerPC
