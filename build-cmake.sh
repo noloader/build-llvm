@@ -43,7 +43,8 @@ fi
 CURRENT_DIR=$(pwd)
 
 function finish {
-  cd "$CURRENT_DIR"
+  # Swallow errors on exit
+  cd "$CURRENT_DIR" || true
 }
 trap finish EXIT
 
@@ -59,7 +60,7 @@ fi
 mkdir -p "$HOME/cmake_build"
 if ! cd "$HOME/cmake_build"; then
 	echo "Failed to enter $HOME/cmake_build"
-	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+	exit 1
 fi
 
 echo "Downloading CMake 3.12.14 tarball"
@@ -71,7 +72,7 @@ then
 		if ! wget --no-check-certificate https://cmake.org/files/v3.12/cmake-3.12.4.tar.gz;
 		then
 			echo "Failed to download CMake sources"
-			[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+			exit 1
 		fi
 	fi
 fi
@@ -82,7 +83,7 @@ then
 	if ! "$TAR" --strip-components=1 -xzf cmake-3.12.4.tar.gz;
 	then
 		echo "Failed to unpack CMake sources"
-		[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+		exit 1
 	fi
 	touch cmake-3.12.4.unpacked
 fi
@@ -114,13 +115,13 @@ fi
 if ! CC="$CC" CXX="$CXX" CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" LDFLAGS="$LDFLAGS" ./bootstrap --prefix="$PREFIX" --parallel="$JOBS";
 then
 	echo "Failed to bootstrap CMake sources"
-	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+	exit 1
 fi
 
 if ! "$MAKE" -j "$JOBS" VERBOSE=1;
 then
 	echo "Failed to make CMake sources"
-	[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 1 || return 1
+	exit 1
 fi
 
 echo "*****************************************************************************"
@@ -132,4 +133,5 @@ echo "  cd .."
 echo "  rm -rf \"$HOME/cmake_build\""
 echo "*****************************************************************************"
 
-[[ "$0" = "${BASH_SOURCE[0]}" ]] && exit 0 || return 0
+exit 0
+
