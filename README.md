@@ -4,6 +4,8 @@ Recipes to download and build LLVM, Compiler front end and Compiler-RT from sour
 
 Testing on Fedora, Ubuntu, CentOS and PowerPC reveals no `LD_LIBRARY_PATH` is needed to run an executable. LLVM fails to build on a old Apple PowerMac G5.
 
+LLVM requires CMake 3.4.3 or above, and GCC 4.8.5 or above. Be sure you meet the prerequisites.
+
 # Variables
 
 There are several variables of interest you can tune for the build. `BS_` stands for `BUILD_SCRIPT`.
@@ -19,9 +21,7 @@ There are several variables of interest you can tune for the build. `BS_` stands
 
 # Building the sources
 
-`./build-llvm.sh` is all that is required to download and build the LLVM sources. You will have to manually install Clang after you build it.
-
-LLVM requires CMake 3.4.3 or above, and GCC 4.8.5 or above. The script honors alternate compilers, and you can pass them to CMake using:
+`./build-llvm.sh` is all that is required to download and build the LLVM sources. You will have to manually install Clang after you build it. The script honors alternate compilers, and you can pass them to CMake using:
 
 ```
 # Attempt to build on PowerMac with MacPorts GCC
